@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Category;
+use App\Models\TestType;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -10,7 +10,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
-class CategoryCrudController extends Controller
+class TestTypeCrudController extends Controller
 {
     use HasResourceActions;
 
@@ -79,13 +79,12 @@ class CategoryCrudController extends Controller
      */
     protected function grid()
     {
-        $grid = new Grid(new Category);
+        $grid = new Grid(new TestType);
 
         $grid->id('ID');
         $grid->name('name');
         $grid->code('code');
         $grid->slug('slug');
-        $grid->image('image');
         $grid->description('description');
         $grid->created_at(trans('admin.created_at'));
         $grid->updated_at(trans('admin.updated_at'));
@@ -101,13 +100,12 @@ class CategoryCrudController extends Controller
      */
     protected function detail($id)
     {
-        $show = new Show(Category::findOrFail($id));
+        $show = new Show(TestType::findOrFail($id));
 
         $show->id('ID');
         $show->name('name');
         $show->code('code');
         $show->slug('slug');
-        $show->image('image');
         $show->description('description');
         $show->created_at(trans('admin.created_at'));
         $show->updated_at(trans('admin.updated_at'));
@@ -122,14 +120,15 @@ class CategoryCrudController extends Controller
      */
     protected function form()
     {
-        $form = new Form(new Category);
+        $form = new Form(new TestType);
 
-        $form->display('id', __('ID'));
-        $form->text('name', __('Name'));
-        $form->text('code', __('Code'));
-        $form->text('slug', __('Slug'));
-        $form->image('image', __('Image'));
-        $form->textarea('description', __('Description'));
+        $form->display('ID');
+        $form->text('name', 'name');
+        $form->text('code', 'code');
+        $form->text('slug', 'slug');
+        $form->text('description', 'description');
+        $form->display(trans('admin.created_at'));
+        $form->display(trans('admin.updated_at'));
 
         return $form;
     }

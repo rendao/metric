@@ -32,7 +32,7 @@ class Category extends Model
    protected static function booted()
    {
        static::creating(function ($category) {
-           $category->attributes['code'] = 'cat-'.Str::random(11);
+           $category->attributes['code'] = 'C-'.Str::random(11);
        });
    }
 
