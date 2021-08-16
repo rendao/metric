@@ -81,17 +81,17 @@ class TestCrudController extends Controller
     {
         $grid = new Grid(new Test);
 
-        $grid->id('ID');
-        $grid->name('name');
-        $grid->code('code');
-        $grid->slug('slug');
-        $grid->image('image');
-        $grid->short_description('short_description');
-        $grid->description('description');
-        $grid->category_id('category_id');
-        $grid->test_type_id('test_type_id');
-        $grid->created_at(trans('admin.created_at'));
-        $grid->updated_at(trans('admin.updated_at'));
+        $grid->id('id', __('ID'));
+        $grid->code('code', __('Code'));
+        $grid->slug('slug', __('Slug'));
+        $grid->name('name', __('Name'));
+        // $grid->column('image', __('Image'))->image('', 48, 48);
+        // $grid->short_description('short_description');
+        // $grid->description('description');
+        $grid->column('category.name',  __('Category'))->label('info');
+        $grid->column('test_type.name',  __('Type'));
+        // $grid->created_at(trans('admin.created_at'));
+        // $grid->updated_at(trans('admin.updated_at'));
 
         return $grid;
     }
@@ -130,19 +130,21 @@ class TestCrudController extends Controller
     {
         $form = new Form(new Test);
 
-        $form->display('ID');
+        // $form->display('ID');
         $form->select('category_id', __('Category'))->options('/admin/category/api');
         $form->select('test_type_id', __('Type'))->options('/admin/test_type/api');
-        $form->text('name', 'name');
+        $form->text('name', __('Name'));
         // $form->text('code', 'code');
-        $form->text('slug', 'slug');
-        $form->image('image', 'image');
-        $form->textarea('short_description', 'short_description');
-        $form->textarea('description', 'description');
+        $form->text('slug', __('Slug'));
+        $form->image('image', __('Image'));
+        $form->textarea('short_description', 'Short Description');
+        $form->textarea('description', 'Description');
+        $form->textarea('script', 'Script');
+        $form->textarea('template', 'Template');
         // $form->text('category_id', 'category_id');
         // $form->text('test_type_id', 'test_type_id');
-        $form->display(trans('admin.created_at'));
-        $form->display(trans('admin.updated_at'));
+        // $form->display(trans('admin.created_at'));
+        // $form->display(trans('admin.updated_at'));
 
         // $type = $id ? Factor::where('id', $id)->value('type') : 1;
         // $form->select('type','Type')->options(['1'=>'For Question','2'=>'For Answer'])->default($type);

@@ -6,6 +6,31 @@
 ### In development...
 
 
+### Install
+```
+git clone https://github.com/rendao/metric.git
+
+cd metric
+
+composer update
+
+```
+
+config mysql information in `.env`
+
+```
+php artisan migrate
+
+php artisan serve
+```
+
+### Test sacle
+
+#### Zung Self-Rating Depression Scale (SDS)
+
+``` /documents/Zung_Scale.pdf```
+
+
 ### Contributors
 
 * Laravel - https://www.laravel.com

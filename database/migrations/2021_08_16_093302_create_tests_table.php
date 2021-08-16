@@ -19,10 +19,10 @@ class CreateTestsTable extends Migration
             $table->string('code')->unique();
             $table->string('slug')->unique();
             $table->string('image');
-            $table->text('short_description');
-            $table->text('description');
-            $table->text('script');
-            $table->text('template');
+            $table->text('short_description')->nullable();
+            $table->text('description')->nullable();
+            $table->text('script')->nullable();
+            $table->text('template')->nullable();
             $table->integer('category_id');
             $table->integer('test_type_id');
             $table->timestamps();
