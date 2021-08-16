@@ -112,7 +112,7 @@ class TestCrudController extends Controller
         $show->slug('slug');
         $show->image('image');
         $show->short_description('short_description');
-        $show->description('description');
+        $show->description('description')->setEscape(false);
         $show->category_id('category_id');
         $show->test_type_id('test_type_id');
         $show->created_at(trans('admin.created_at'));
@@ -130,7 +130,7 @@ class TestCrudController extends Controller
     {
         $form = new Form(new Test);
 
-        // $form->display('ID');
+        $form->display('id');
         $form->select('category_id', __('Category'))->options('/admin/category/api');
         $form->select('test_type_id', __('Type'))->options('/admin/test_type/api');
         $form->text('name', __('Name'));
@@ -138,8 +138,8 @@ class TestCrudController extends Controller
         $form->text('slug', __('Slug'));
         $form->image('image', __('Image'));
         $form->textarea('short_description', 'Short Description');
-        $form->textarea('description', 'Description');
-        $form->textarea('script', 'Script');
+        $form->summernote('description', 'Description');
+        $form->php('script', 'Script')->height(100);
         $form->textarea('template', 'Template');
         // $form->text('category_id', 'category_id');
         // $form->text('test_type_id', 'test_type_id');

@@ -18,9 +18,10 @@ class CreateTestsTable extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->string('slug')->unique();
-            $table->string('image');
+            $table->text('image')->nullable();
             $table->text('short_description')->nullable();
             $table->text('description')->nullable();
+            $table->text('api')->nullable();
             $table->text('script')->nullable();
             $table->text('template')->nullable();
             $table->integer('category_id');
