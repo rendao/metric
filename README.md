@@ -9,18 +9,20 @@
 ### Install
 ```
 git clone https://github.com/rendao/metric.git
-
+```
+```
 cd metric
-
+```
+```
 composer update
-
 ```
 
 config mysql information in `.env`
 
 ```
 php artisan migrate
-
+```
+```
 php artisan serve
 ```
 
