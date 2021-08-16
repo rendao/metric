@@ -21,11 +21,15 @@ class CreateTestsTable extends Migration
             $table->text('image')->nullable();
             $table->text('short_description')->nullable();
             $table->text('description')->nullable();
-            $table->text('api')->nullable();
-            $table->text('script')->nullable();
+            $table->text('compute_api')->nullable();
+            $table->boolean('compute_api_enabled')->default(0);
+            $table->text('compute_script')->nullable();
+            $table->boolean('compute_script_enabled')->default(0);
             $table->text('template')->nullable();
+            $table->boolean('template_enabled')->default(0);
             $table->integer('category_id');
             $table->integer('test_type_id');
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }

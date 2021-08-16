@@ -113,7 +113,7 @@ class TestCrudController extends Controller
         $show->image('image');
         $show->short_description('short_description');
         $show->description('description')->setEscape(false);
-        $show->category_id('category_id');
+        $show->field('category.name',  __('Category'))->label('info');
         $show->test_type_id('test_type_id');
         $show->created_at(trans('admin.created_at'));
         $show->updated_at(trans('admin.updated_at'));
@@ -129,7 +129,7 @@ class TestCrudController extends Controller
     protected function form($id='')
     {
         $form = new Form(new Test);
-
+        $form->column(1/2, function ($form) {
         $form->display('id');
         $form->select('category_id', __('Category'))->options('/admin/category/api');
         $form->select('test_type_id', __('Type'))->options('/admin/test_type/api');
@@ -137,10 +137,18 @@ class TestCrudController extends Controller
         // $form->text('code', 'code');
         $form->text('slug', __('Slug'));
         $form->image('image', __('Image'));
-        $form->textarea('short_description', 'Short Description');
-        $form->summernote('description', 'Description');
-        $form->php('script', 'Script')->height(100);
-        $form->textarea('template', 'Template');
+        $form->textarea('short_description', __('Short Description'));
+        $form->summernote('description', __('Description'));
+        });
+        $form->column(1/2, function ($form) {
+        $form->text('compute_api', __('API'));
+        $form->switch('compute_api_enabled', __('API Enabled'));
+        $form->php('compute_script', __('Script'))->height(100);
+        $form->switch('compute_script_enabled', __('Script Enabled'));
+        $form->textarea('template', __('Template'));
+        $form->switch('template_enabled', __('Template Enabled'));
+        });
+
         // $form->text('category_id', 'category_id');
         // $form->text('test_type_id', 'test_type_id');
         // $form->display(trans('admin.created_at'));
