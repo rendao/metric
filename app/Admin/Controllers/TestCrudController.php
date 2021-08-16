@@ -130,23 +130,23 @@ class TestCrudController extends Controller
     {
         $form = new Form(new Test);
         $form->column(1/2, function ($form) {
-        $form->display('id');
-        $form->select('category_id', __('Category'))->options('/admin/category/api');
-        $form->select('test_type_id', __('Type'))->options('/admin/test_type/api');
-        $form->text('name', __('Name'));
-        // $form->text('code', 'code');
-        $form->text('slug', __('Slug'));
-        $form->image('image', __('Image'));
-        $form->textarea('short_description', __('Short Description'));
-        $form->summernote('description', __('Description'));
+            $form->display('id');
+            $form->select('category_id', __('Category'))->options('/admin/category/api');
+            $form->select('test_type_id', __('Type'))->options('/admin/test_type/api');
+            $form->text('name', __('Name'));
+            // $form->text('code', 'code');
+            $form->text('slug', __('Slug'));
+            $form->textarea('short_description', __('Short Description'));
+            $form->summernote('description', __('Description'));
         });
         $form->column(1/2, function ($form) {
-        $form->text('compute_api', __('API'));
-        $form->switch('compute_api_enabled', __('API Enabled'));
-        $form->php('compute_script', __('Script'))->height(100);
-        $form->switch('compute_script_enabled', __('Script Enabled'));
-        $form->textarea('template', __('Template'));
-        $form->switch('template_enabled', __('Template Enabled'));
+            $form->image('image', __('Image'));
+            $form->text('compute_api', __('API'));
+            $form->switch('compute_api_enabled', __('API Enabled'));
+            $form->php('compute_script', __('Script'))->height(100);
+            $form->switch('compute_script_enabled', __('Script Enabled'));
+            $form->textarea('template', __('Template'));
+            $form->switch('template_enabled', __('Template Enabled'));
         });
 
         // $form->text('category_id', 'category_id');
