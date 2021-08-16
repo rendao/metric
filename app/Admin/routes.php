@@ -13,4 +13,6 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('categories', CategoryCrudController::class);
+    $router->resource('test_types', TestTypeCrudController::class);
+    $router->resource('tests', TestCrudController::class);
 });

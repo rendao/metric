@@ -16,8 +16,8 @@ class CreateTestTypesTable extends Migration
         Schema::create('test_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->comment('Name');
-            $table->string('code')->unique()->comment('Code');
-            $table->string('slug')->comment('Slug');
+            $table->string('code')->unique()->comment('Code')->unique();
+            $table->string('slug')->comment('Slug')->unique();
             $table->longText('description')->comment('Description');
             $table->timestamps();
         });
