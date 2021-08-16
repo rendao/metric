@@ -132,4 +132,9 @@ class TestTypeCrudController extends Controller
 
         return $form;
     }
+
+    public function api(){
+        $data = TestType::select('id', 'name as text')->get();
+        return response()->json($data);
+     }
 }

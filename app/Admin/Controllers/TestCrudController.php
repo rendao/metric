@@ -126,21 +126,26 @@ class TestCrudController extends Controller
      *
      * @return Form
      */
-    protected function form()
+    protected function form($id='')
     {
         $form = new Form(new Test);
 
         $form->display('ID');
+        $form->select('category_id', __('Category'))->options('/admin/category/api');
+        $form->select('test_type_id', __('Type'))->options('/admin/test_type/api');
         $form->text('name', 'name');
-        $form->text('code', 'code');
+        // $form->text('code', 'code');
         $form->text('slug', 'slug');
-        $form->text('image', 'image');
-        $form->text('short_description', 'short_description');
-        $form->text('description', 'description');
-        $form->text('category_id', 'category_id');
-        $form->text('test_type_id', 'test_type_id');
+        $form->image('image', 'image');
+        $form->textarea('short_description', 'short_description');
+        $form->textarea('description', 'description');
+        // $form->text('category_id', 'category_id');
+        // $form->text('test_type_id', 'test_type_id');
         $form->display(trans('admin.created_at'));
         $form->display(trans('admin.updated_at'));
+
+        // $type = $id ? Factor::where('id', $id)->value('type') : 1;
+        // $form->select('type','Type')->options(['1'=>'For Question','2'=>'For Answer'])->default($type);
 
         return $form;
     }

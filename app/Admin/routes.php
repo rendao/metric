@@ -13,6 +13,8 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('categories', CategoryCrudController::class);
+    $router->any('category/api', 'CategoryCrudController@api');
     $router->resource('test_types', TestTypeCrudController::class);
+    $router->any('test_type/api', 'TestTypeCrudController@api');
     $router->resource('tests', TestCrudController::class);
 });

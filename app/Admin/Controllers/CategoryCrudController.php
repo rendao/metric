@@ -133,4 +133,9 @@ class CategoryCrudController extends Controller
 
         return $form;
     }
+
+    public function api(){
+        $data = Category::select('id', 'name as text')->get();
+        return response()->json($data);
+    }
 }
