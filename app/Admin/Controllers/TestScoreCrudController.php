@@ -10,7 +10,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
-class TestScoreController extends Controller
+class TestScoreCrudController extends Controller
 {
     use HasResourceActions;
 
@@ -81,15 +81,17 @@ class TestScoreController extends Controller
     {
         $grid = new Grid(new TestScore);
 
+        $grid->actions(function ($actions) {
+            $actions->disableView();
+        });
+
         $grid->id('ID');
         $grid->code('code');
-        $grid->test_id('test_id');
+        $grid->column('test.id', __('test'));
         $grid->trait('trait');
         $grid->start('start');
         $grid->end('end');
-        $grid->response('response');
-        $grid->created_at(trans('admin.created_at'));
-        $grid->updated_at(trans('admin.updated_at'));
+        $grid->name('name');
 
         return $grid;
     }
@@ -122,19 +124,20 @@ class TestScoreController extends Controller
      *
      * @return Form
      */
-    protected function form()
+    protected function form($id='')
     {
         $form = new Form(new TestScore);
 
-        $form->display('ID');
-        $form->text('code', 'code');
-        $form->text('test_id', 'test_id');
-        $form->text('trait', 'trait');
-        $form->text('start', 'start');
-        $form->text('end', 'end');
-        $form->text('response', 'response');
-        $form->display(trans('admin.created_at'));
-        $form->display(trans('admin.updated_at'));
+        if ($id) {
+            $form->display('id');
+        }
+        $form->select('test_id', __('admin.test'))->options('/admin/test/api')->required();
+        $form->text('trait', 'Trait');
+        $form->number('start', 'Start');
+        $form->number('end', 'End');
+        $form->text('name', 'Name');
+        $form->textarea('response', 'response');
+        $form->image('image', 'Image');
 
         return $form;
     }

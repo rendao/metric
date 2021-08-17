@@ -20,9 +20,13 @@ Route::group([
     $router->any('test_type/api', 'TestTypeCrudController@api');
     $router->resource('tests', TestCrudController::class);
     $router->any('test/api', 'TestCrudController@api');
+    $router->resource('test_sessions', TestSessionController::class);
 
     $router->get('question_types', 'QuestionTypeCrudController@index');
     $router->any('question_type/api', 'QuestionTypeCrudController@api');
     $router->resource('questions', QuestionCrudController::class);
+    $router->resource('question_sessions', QuestionSessionController::class);
+
+    $router->resource('test_scores', TestScoreCrudController::class);
 
 });

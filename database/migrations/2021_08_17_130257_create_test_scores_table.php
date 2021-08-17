@@ -17,11 +17,12 @@ class CreateTestScoresTable extends Migration
             $table->increments('id');
             $table->uuid('code')->unique();
             $table->unsignedBigInteger('test_id');
-            $table->string('trait');
-            $table->integer('start');
-            $table->integer('end');
-            $table->string('name');
-            $table->json('response');
+            $table->string('trait')->nullable();
+            $table->integer('start')->nullable();
+            $table->integer('end')->nullable();
+            $table->string('name')->nullable();
+            $table->text('image')->nullable();
+            $table->json('response')->nullable();
             $table->timestamps();
         });
     }
