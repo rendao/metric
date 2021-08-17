@@ -19,6 +19,7 @@ Route::group([
     $router->get('test_types', 'TestTypeCrudController@index');
     $router->any('test_type/api', 'TestTypeCrudController@api');
     $router->resource('tests', TestCrudController::class);
+    $router->any('test/api', 'TestCrudController@api');
 
     $router->get('question_types', 'QuestionTypeCrudController@index');
     $router->any('question_type/api', 'QuestionTypeCrudController@api');

@@ -22,6 +22,7 @@ class CreateQuestionsTable extends Migration
             $table->string('trait')->nullable();
             $table->text('question')->nullable();
             $table->json('options')->nullable();
+            $table->text('image')->nullable();
             $table->text('hint')->nullable();
             $table->boolean('skippable')->default(1);
             $table->timestamps();

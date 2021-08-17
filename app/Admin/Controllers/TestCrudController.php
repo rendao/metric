@@ -137,7 +137,7 @@ class TestCrudController extends Controller
         });
         $form->column(1/2, function ($form) {
             $form->image('image', __('Image'));
-            $form->text('compute_api', __('API'));
+            $form->url('compute_api', __('API'));
             $form->switch('compute_api_enabled', __('API Enabled'));
             $form->php('compute_script', __('Script'))->height(100);
             $form->switch('compute_script_enabled', __('Script Enabled'));
@@ -149,5 +149,11 @@ class TestCrudController extends Controller
         // $form->select('type','Type')->options(['1'=>'For Question','2'=>'For Answer'])->default($type);
 
         return $form;
+    }
+
+    
+    public function api(){
+        $data = Test::select('id', 'name as text')->get();
+        return response()->json($data);
     }
 }
