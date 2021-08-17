@@ -132,17 +132,19 @@ class TestCrudController extends Controller
             $form->text('name', __('Name'))->required();
             // $form->text('code', 'code');
             $form->text('slug', __('Slug'));
-            $form->textarea('short_description', __('Short Description'));
-            $form->summernote('description', __('Description'));
+            $form->textarea('short_description', __('Short Description'));  
         });
         $form->column(2/3, function ($form) {
             $form->image('image', __('Image'));
-            $form->url('compute_api', __('API'));
-            $form->switch('compute_api_enabled', __('API Enabled'));
-            $form->php('compute_script', __('Script'))->height(100);
-            $form->switch('compute_script_enabled', __('Script Enabled'));
-            $form->textarea('template', __('Template'));
-            $form->switch('template_enabled', __('Template Enabled'));
+            $form->summernote('description', __('Description'));
+            $form->fieldset('Addons', function (Form $form) {
+                $form->url('compute_api', __('API'));
+                $form->switch('compute_api_enabled', __('API Enabled'));
+                $form->php('compute_script', __('Script'))->height(100);
+                $form->switch('compute_script_enabled', __('Script Enabled'));
+                $form->textarea('template', __('Template'));
+                $form->switch('template_enabled', __('Template Enabled'));
+            });
         });
 
         // $type = $id ? Factor::where('id', $id)->value('type') : 1;

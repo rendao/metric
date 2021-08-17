@@ -81,14 +81,17 @@ class CategoryCrudController extends Controller
     {
         $grid = new Grid(new Category);
 
+        $grid->quickCreate(function (Grid\Tools\QuickCreate $create) {
+            $create->text('name', 'Name');
+            $create->text('slug', 'Slug');
+        });
+
         $grid->id('ID');
         $grid->name('name');
         $grid->code('code');
         $grid->slug('slug');
         $grid->image('image');
         $grid->description('description');
-        $grid->created_at(trans('admin.created_at'));
-        $grid->updated_at(trans('admin.updated_at'));
 
         return $grid;
     }

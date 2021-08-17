@@ -88,12 +88,12 @@ class QuestionCrudController extends Controller
         $grid = new Grid(new Question);
 
         $grid->id( __('admin.id'));
+        $grid->question(__('admin.question'));
         $grid->code(__('admin.code'));
         $grid->position(__('admin.position'));
         $grid->trait(__('admin.trait'));
-        $grid->question(__('admin.question'));
-        $grid->column('test.id',  __('admin.test'))->label('info');
-        $grid->column('question_type.name',  __('admin.type'));
+        $grid->column('question_type.code',  __('admin.type'))->label('info');
+        $grid->column('test.name',  __('admin.test'));
 
         return $grid;
     }
@@ -122,6 +122,7 @@ class QuestionCrudController extends Controller
     protected function form($id='')
     {
         $form = new Form(new Question);
+
         $form->column(1/4, function ($form) {
             $form->text('question', __('admin.question'))->required();
             $form->select('test_id', __('admin.category'))->options('/admin/test/api')->required();
@@ -133,6 +134,7 @@ class QuestionCrudController extends Controller
         });
         $form->column(3/4, function ($form) {
             $form->summernote('hint', __('admin.description'));
+            $form->divider('Answer Options');
             $form->table('options', __('options'), function ($form) {
                 $form->text('label');
                 $form->text('value');
