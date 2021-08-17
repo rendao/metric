@@ -81,19 +81,25 @@ class TestSessionController extends Controller
     {
         $grid = new Grid(new TestSession);
 
+        $grid->disableCreation();
+        $grid->actions(function ($actions) {
+            $actions->disableEdit();
+        });
+
         $grid->id('ID');
-        $grid->user_id('user_id');
-        $grid->test_id('test_id');
         $grid->code('code');
-        $grid->result('result');
-        $grid->current_question('current_question');
+        $grid->column('user.name', 'User');
+        $grid->column('test.name', 'Test');
+        $grid->column('question.id', 'QID');
+
         $grid->start_at('start_at');
         $grid->end_at('end_at');
-        $grid->total_time_taken('total_time_taken');
         $grid->completed_at('completed_at');
+        $grid->total_time_taken('total_time_taken');
+        $grid->result('result');
+        
         $grid->status('status');
-        $grid->created_at(trans('admin.created_at'));
-        $grid->updated_at(trans('admin.updated_at'));
+
 
         return $grid;
     }

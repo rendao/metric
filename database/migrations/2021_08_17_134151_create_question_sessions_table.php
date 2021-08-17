@@ -19,11 +19,11 @@ class CreateQuestionSessionsTable extends Migration
             $table->unsignedBigInteger('test_id');
             $table->unsignedBigInteger('test_session_id');
             $table->unsignedBigInteger('question_id');
-            $table->string('trait');
-            $table->json('option');
-            $table->integer('time_taken');
+            $table->string('trait')->nullable();
+            $table->json('option')->nullable();
+            $table->integer('time_taken')->default(0);
             $table->string('status')->default('unanswered');
-            $table->boolean('skipped');
+            $table->boolean('skipped')->default(0);
             $table->timestamps();
 
             $table->primary(['test_session_id', 'test_id', 'question_id'], 'question_sessions_primary');
