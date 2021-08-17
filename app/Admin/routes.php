@@ -12,9 +12,16 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('home');
+
     $router->resource('categories', CategoryCrudController::class);
     $router->any('category/api', 'CategoryCrudController@api');
+
     $router->resource('test_types', TestTypeCrudController::class);
     $router->any('test_type/api', 'TestTypeCrudController@api');
     $router->resource('tests', TestCrudController::class);
+
+    $router->resource('question_types', QuestionTypeCrudController::class);
+    $router->any('question_type/api', 'QuestionTypeCrudController@api');
+    $router->resource('questions', QuestionCrudController::class);
+
 });

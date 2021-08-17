@@ -86,12 +86,8 @@ class TestCrudController extends Controller
         $grid->slug('slug', __('Slug'));
         $grid->name('name', __('Name'));
         // $grid->column('image', __('Image'))->image('', 48, 48);
-        // $grid->short_description('short_description');
-        // $grid->description('description');
         $grid->column('category.name',  __('Category'))->label('info');
         $grid->column('test_type.name',  __('Type'));
-        // $grid->created_at(trans('admin.created_at'));
-        // $grid->updated_at(trans('admin.updated_at'));
 
         return $grid;
     }
@@ -148,11 +144,6 @@ class TestCrudController extends Controller
             $form->textarea('template', __('Template'));
             $form->switch('template_enabled', __('Template Enabled'));
         });
-
-        // $form->text('category_id', 'category_id');
-        // $form->text('test_type_id', 'test_type_id');
-        // $form->display(trans('admin.created_at'));
-        // $form->display(trans('admin.updated_at'));
 
         // $type = $id ? Factor::where('id', $id)->value('type') : 1;
         // $form->select('type','Type')->options(['1'=>'For Question','2'=>'For Answer'])->default($type);
