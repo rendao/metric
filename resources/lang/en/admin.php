@@ -104,4 +104,11 @@ return [
     'prev'                   => 'Prev',
     'next'                   => 'Next',
     'quick_create'           => 'Quick create',
+    
+    'index' => 'Admin',
+    'id' => 'ID',
+    'code' => 'CODE',
+    'name' => 'NAME',
+    'type' => 'TYPE',
+    'description' => 'DESCRIPTION',
 ];

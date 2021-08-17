@@ -2,84 +2,47 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\QuestionType;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+// use Encore\Admin\Controllers\HasResourceActions;
+use Encore\Admin\Grid;
+use Encore\Admin\Layout\Content;
 
 class QuestionTypeCrudController extends Controller
 {
+    // use HasResourceActions;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Content $content)
     {
-        //
+        return $content
+            ->header(trans('admin.index'))
+            ->description(trans('admin.description'))
+            ->body($this->grid());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    protected function grid()
     {
-        //
-    }
+        $grid = new Grid(new QuestionType);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $grid->id(trans('admin.id'));
+        $grid->name(trans('admin.name'));
+        $grid->code(trans('admin.code'));
+        $grid->type(trans('admin.type'));
+        $grid->description(__('admin.description'));
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $grid;
     }
+    
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function api(){
+        $data = QuestionType::select('id', 'name as text')->get();
+        return response()->json($data);
     }
 }
