@@ -21,8 +21,8 @@ class QuestionTypeCrudController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header(trans('admin.index'))
-            ->description(trans('admin.description'))
+            ->header(__('admin.index'))
+            ->description(__('admin.description'))
             ->body($this->grid());
     }
 
@@ -31,10 +31,18 @@ class QuestionTypeCrudController extends Controller
     {
         $grid = new Grid(new QuestionType);
 
-        $grid->id(trans('admin.id'));
-        $grid->name(trans('admin.name'));
-        $grid->code(trans('admin.code'));
-        $grid->type(trans('admin.type'));
+        $grid->disableActions();
+        $grid->disableCreation();
+
+        // $grid->actions(function ($actions) {
+        //     $actions->disableDelete();
+        //     $actions->disableEdit();
+        // });
+
+        $grid->id(__('admin.id'));
+        $grid->name(__('admin.name'));
+        $grid->code(__('admin.code'))->label('info');
+        $grid->type(__('admin.type'));
         $grid->description(__('admin.description'));
 
         return $grid;
