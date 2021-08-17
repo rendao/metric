@@ -15,6 +15,13 @@ class TestSession extends Model
 
     protected $table = 'test_sessions';
 
+    protected $appends = ['total_time_taken'];
+
+    // Computed
+    // public function getTotalTimeTakenAttribute(){
+    //     return ;
+    // }
+
     public function user()
     {
       return $this->belongsTo(User::class, 'user_id', 'id');
