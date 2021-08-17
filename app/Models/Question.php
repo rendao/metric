@@ -14,6 +14,10 @@ class Question extends Model
     use HasFactory;
 
     protected $table = 'questions';
+
+    protected $casts = [
+        'options' => 'json',
+    ];
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -52,8 +56,8 @@ class Question extends Model
 
    protected static function booted()
    {
-       static::creating(function ($category) {
-           $category->attributes['code'] = 'T-'.Str::random(11);
+       static::creating(function ($question) {
+           $question->attributes['code'] = 'Q-'.Str::random(11);
        });
    }
 }

@@ -21,10 +21,6 @@ Admin::style('#has-many-options .input-group-addon {display: none;}');
 class QuestionCrudController extends Controller
 {
     use HasResourceActions;
-
-    protected $casts = [
-        'options' => 'json',
-    ];
     /**
      * Display a listing of the resource.
      *
