@@ -13,6 +13,11 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
+Use Encore\Admin\Admin;
+
+Admin::style('.file-preview {display: none;}');
+Admin::style('#has-many-options .input-group-addon {display: none;}');
+
 class QuestionCrudController extends Controller
 {
     use HasResourceActions;
@@ -135,9 +140,9 @@ class QuestionCrudController extends Controller
             $form->table('options', __('options'), function ($form) {
                 $form->text('label');
                 $form->text('value');
-                $form->text('score');
+                $form->number('score');
                 $form->text('trait');
-                $form->image('image');
+                $form->file('image')->rules('mimes:jpg,png,gif');
             });
 
         });
