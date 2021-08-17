@@ -81,17 +81,22 @@ class QuestionSessionController extends Controller
     {
         $grid = new Grid(new QuestionSession);
 
+        $grid->disableCreation();
+        $grid->actions(function ($actions) {
+            $actions->disableEdit();
+        });
+
         $grid->id('ID');
-        $grid->test_id('test_id');
-        $grid->user_id('user_id');
+        $grid->column('user.name', 'User');
+        $grid->column('test.name', 'Test');
+        $grid->column('question.id', 'QID');
+        $grid->column('test_session.id', 'Test Session');
+
         $grid->trait('trait');
-        $grid->option('option');
-        $grid->test_session_id('test_session_id');
+        $grid->column('option', 'Option');
         $grid->time_taken('time_taken');
         $grid->status('status');
         $grid->skipped('skipped');
-        $grid->created_at(trans('admin.created_at'));
-        $grid->updated_at(trans('admin.updated_at'));
 
         return $grid;
     }
