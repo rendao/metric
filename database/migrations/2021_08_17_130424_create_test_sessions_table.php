@@ -18,13 +18,13 @@ class CreateTestSessionsTable extends Migration
             $table->uuid('code')->unique();
             $table->unsignedBigInteger('test_id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('current_question_id');
+            $table->integer('current_question_id')->default(0);
             $table->dateTime('start_at');
             $table->dateTime('end_at');
-            $table->dateTime('completed_at');
-            $table->integer('total_time_taken');
-            $table->string('status')->default('start');
-            $table->json('result');
+            $table->dateTime('completed_at')->nullable();
+            $table->integer('total_time_taken')->default(0);
+            $table->string('status')->default('start')->index();
+            $table->json('result')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
