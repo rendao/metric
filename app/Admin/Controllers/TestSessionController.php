@@ -86,6 +86,9 @@ class TestSessionController extends Controller
             $actions->disableEdit();
         });
 
+        $test_id = request('test_id');
+        $grid->model()->where('test_id', '=', $test_id);
+        
         $grid->id('ID');
         $grid->code('code');
         $grid->column('user.name', 'User');

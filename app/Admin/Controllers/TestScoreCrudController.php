@@ -79,7 +79,11 @@ class TestScoreCrudController extends Controller
      */
     protected function grid()
     {
+        
         $grid = new Grid(new TestScore);
+
+        $test_id = request('test_id');
+        $grid->model()->where('test_id', '=', $test_id);
 
         $grid->actions(function ($actions) {
             $actions->disableView();

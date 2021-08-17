@@ -89,6 +89,15 @@ class TestCrudController extends Controller
         $grid->column('category.name',  __('Category'))->label('info');
         $grid->column('test_type.name',  __('Type'));
 
+        $grid->column('id', 'Manage')->display(function($id, $column) {
+            return "
+            <a href='test_scores?test_id={$id}'>Scores</a> / 
+            <a href='questions?test_id={$id}'>Questions</a> /
+            <a href='test_sessions?test_id={$id}'>Sessions</a>
+            ";
+        });
+
+
         return $grid;
     }
 
