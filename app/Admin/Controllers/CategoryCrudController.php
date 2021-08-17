@@ -125,8 +125,8 @@ class CategoryCrudController extends Controller
         $form = new Form(new Category);
 
         $form->display('id', __('ID'));
-        $form->text('name', __('Name'));
-        $form->text('code', __('Code'));
+        $form->text('name', __('Name'))->required();
+        // $form->text('code', __('Code'));
         $form->text('slug', __('Slug'));
         $form->image('image', __('Image'));
         $form->textarea('description', __('Description'));

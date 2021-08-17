@@ -127,9 +127,9 @@ class QuestionCrudController extends Controller
     {
         $form = new Form(new Question);
         $form->column(1/4, function ($form) {
-            $form->text('question', __('admin.question'));
-            $form->select('test_id', __('admin.category'))->options('/admin/test/api');
-            $form->select('question_type_id', __('admin.type'))->options('/admin/question_type/api');
+            $form->text('question', __('admin.question'))->required();
+            $form->select('test_id', __('admin.category'))->options('/admin/test/api')->required();
+            $form->select('question_type_id', __('admin.type'))->options('/admin/question_type/api')->required();
             $form->switch('skippable', __('skippable'));
             $form->number('position', __('position'));
             $form->text('trait');
