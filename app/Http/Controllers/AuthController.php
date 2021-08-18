@@ -10,6 +10,9 @@ use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+
 class AuthController extends Controller
 {
     /**
@@ -23,7 +26,7 @@ class AuthController extends Controller
     }
 
     /**
-     * login
+     * login https://laravel.com/docs/5.8/api-authentication
      *
      * @return \Illuminate\Http\Response
      */
@@ -48,8 +51,8 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if (auth()->attempt($credentials)) {
-            $token = auth()->user()->createToken('TutsForWeb')->accessToken;
-            return response()->json(['token' => $token], 200);
+            $token = $this->update($request);
+            return response()->json($token, 200);
         } else {
             return response()->json(['error' => 'UnAuthorised'], 401);
         }
@@ -68,22 +71,29 @@ class AuthController extends Controller
 
         if(!$result->isEmpty())
             return $result;
-
-        $user = $this->create($request->all());
-        return $user;
-    }
-
-    protected function create(array $data)
-    {
+        $data = $request->all();
+        
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password'])
         ]);
-        
-        $token = $user->createToken('TutsForWeb')->accessToken;
- 
-        return response()->json(['token' => $token], 200);
+
+        $token = $this->update($request);
+
+        return response()->json($token, 200);
     }
+
+    public function update(Request $request)
+    {
+        $token = Str::random(60);
+
+        $request->user()->forceFill([
+            'api_token' => hash('sha256', $token),
+        ])->save();
+
+        return ['token' => $token];
+    }
+
 
 }

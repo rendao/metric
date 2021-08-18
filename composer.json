@@ -14,7 +14,6 @@
         "laravel-admin-ext/php-editor": "^1.0",
         "laravel-admin-ext/summernote": "^1.0",
         "laravel/framework": "^8.54",
-        "laravel/passport": "^10.1",
         "laravel/tinker": "^2.5"
     },
     "require-dev": {
