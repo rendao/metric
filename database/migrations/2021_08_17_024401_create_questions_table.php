@@ -17,7 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->unsignedBigInteger('question_type_id');
-            $table->integer('test_id')->unsigned()->index();
+            $table->unsignedBigInteger('test_id')->index();
             $table->integer('position')->nullable();
             $table->string('trait')->nullable();
             $table->text('question')->nullable();
