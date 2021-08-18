@@ -82,7 +82,9 @@ class TestCrudController extends Controller
         $grid = new Grid(new Test);
 
         $category_id = request('category_id');
-        $grid->model()->where('category_id', '=', $category_id);
+        if ($category_id) {
+            $grid->model()->where('category_id', '=', $category_id);
+        }
 
         $grid->column('id', __('ID'));
         $grid->code('code', __('Code'));
