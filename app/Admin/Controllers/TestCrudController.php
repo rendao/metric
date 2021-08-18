@@ -93,6 +93,7 @@ class TestCrudController extends Controller
         // $grid->column('image', __('Image'))->image('', 48, 48);
         $grid->column('category.name',  __('Category'))->label('info');
         $grid->column('test_type.name',  __('Type'));
+        $grid->column('test_template.name',  __('Template'));
 
         $grid->manage('Manage');
         $grid->rows(function($row, $manage) {

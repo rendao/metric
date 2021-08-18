@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Category;
 use App\Models\TestType;
+use App\Models\TestTemplate;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,11 @@ class Test extends Model
     public function test_type()
     {
       return $this->belongsTo(TestType::class, 'test_type_id', 'id');
+    }
+
+    public function test_template()
+    {
+      return $this->belongsTo(TestTemplate::class, 'test_template_id', 'id');
     }
 
     public function sluggable(): array
