@@ -2,29 +2,23 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Question;
-
+use App\Models\TestScore;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
-Use Encore\Admin\Admin;
-
-Admin::style('.file-preview {display: none;}');
-Admin::style('#has-many-options .input-group-addon {display: none;}');
-
-class QuestionCrudController extends Controller
+class TestScoreCrudController extends Controller
 {
     use HasResourceActions;
+
     /**
-     * Display a listing of the resource.
+     * Index interface.
      *
-     * @return \Illuminate\Http\Response
+     * @param Content $content
+     * @return Content
      */
     public function index(Content $content)
     {
@@ -85,18 +79,23 @@ class QuestionCrudController extends Controller
      */
     protected function grid()
     {
-        $grid = new Grid(new Question);
+        
+        $grid = new Grid(new TestScore);
 
         $test_id = request('test_id');
         $grid->model()->where('test_id', '=', $test_id);
 
-        $grid->id( __('admin.id'));
-        $grid->question(__('admin.question'));
-        $grid->code(__('admin.code'));
-        $grid->position(__('admin.position'));
-        $grid->trait(__('admin.trait'));
-        $grid->column('question_type.code',  __('admin.type'))->label('info');
-        $grid->column('test.name',  __('admin.test'));
+        $grid->actions(function ($actions) {
+            $actions->disableView();
+        });
+
+        $grid->id('ID');
+        $grid->code('code');
+        $grid->column('test.id', __('test'));
+        $grid->trait('trait');
+        $grid->start('start');
+        $grid->end('end');
+        $grid->name('name');
 
         return $grid;
     }
@@ -109,11 +108,18 @@ class QuestionCrudController extends Controller
      */
     protected function detail($id)
     {
-        $show = new Show(Question::findOrFail($id));
+        $show = new Show(TestScore::findOrFail($id));
 
         $show->id('ID');
-        $show->question('Q');
         $show->code('code');
+        $show->test_id('test_id');
+        $show->trait('trait');
+        $show->start('start');
+        $show->end('end');
+        $show->response('response');
+        $show->created_at(trans('admin.created_at'));
+        $show->updated_at(trans('admin.updated_at'));
+
         return $show;
     }
 
@@ -124,30 +130,18 @@ class QuestionCrudController extends Controller
      */
     protected function form($id='')
     {
-        $form = new Form(new Question);
+        $form = new Form(new TestScore);
 
-        $form->column(1/4, function ($form) {
-            $form->text('question', __('admin.question'))->required();
-            $form->select('test_id', __('admin.category'))->options('/admin/test/api')->required();
-            $form->select('question_type_id', __('admin.type'))->options('/admin/question_type/api')->required();
-            $form->switch('skippable', __('skippable'));
-            $form->number('position', __('position'));
-            $form->text('trait');
-            $form->image('image', __('Image'));
-        });
-        $form->column(3/4, function ($form) {
-            $form->summernote('hint', __('admin.description'));
-            $form->divider('Answer Options');
-            $form->table('options', __('options'), function ($form) {
-                $form->text('label');
-                $form->text('value');
-                $form->number('score');
-                $form->text('trait');
-                $form->file('image')->rules('mimes:jpg,png,gif');
-            });
-
-        });
-
+        if ($id) {
+            $form->display('id');
+        }
+        $form->select('test_id', __('admin.test'))->options('/admin/test/api')->required();
+        $form->text('trait', 'Trait');
+        $form->number('start', 'Start');
+        $form->number('end', 'End');
+        $form->text('name', 'Name');
+        $form->textarea('response', 'response');
+        $form->image('image', 'Image');
 
         return $form;
     }

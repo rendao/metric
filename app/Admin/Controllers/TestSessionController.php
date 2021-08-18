@@ -2,29 +2,23 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Question;
-
+use App\Models\TestSession;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
-Use Encore\Admin\Admin;
-
-Admin::style('.file-preview {display: none;}');
-Admin::style('#has-many-options .input-group-addon {display: none;}');
-
-class QuestionCrudController extends Controller
+class TestSessionController extends Controller
 {
     use HasResourceActions;
+
     /**
-     * Display a listing of the resource.
+     * Index interface.
      *
-     * @return \Illuminate\Http\Response
+     * @param Content $content
+     * @return Content
      */
     public function index(Content $content)
     {
@@ -85,18 +79,30 @@ class QuestionCrudController extends Controller
      */
     protected function grid()
     {
-        $grid = new Grid(new Question);
+        $grid = new Grid(new TestSession);
+
+        $grid->disableCreation();
+        $grid->actions(function ($actions) {
+            $actions->disableEdit();
+        });
 
         $test_id = request('test_id');
         $grid->model()->where('test_id', '=', $test_id);
+        
+        $grid->id('ID');
+        $grid->code('code');
+        $grid->column('user.name', 'User');
+        $grid->column('test.name', 'Test');
+        $grid->column('question.id', 'QID');
 
-        $grid->id( __('admin.id'));
-        $grid->question(__('admin.question'));
-        $grid->code(__('admin.code'));
-        $grid->position(__('admin.position'));
-        $grid->trait(__('admin.trait'));
-        $grid->column('question_type.code',  __('admin.type'))->label('info');
-        $grid->column('test.name',  __('admin.test'));
+        $grid->start_at('start_at');
+        $grid->end_at('end_at');
+        $grid->completed_at('completed_at');
+        $grid->total_time_taken('total_time_taken');
+        $grid->result('result');
+        
+        $grid->status('status');
+
 
         return $grid;
     }
@@ -109,11 +115,22 @@ class QuestionCrudController extends Controller
      */
     protected function detail($id)
     {
-        $show = new Show(Question::findOrFail($id));
+        $show = new Show(TestSession::findOrFail($id));
 
         $show->id('ID');
-        $show->question('Q');
+        $show->user_id('user_id');
+        $show->test_id('test_id');
         $show->code('code');
+        $show->result('result');
+        $show->current_question('current_question');
+        $show->start_at('start_at');
+        $show->end_at('end_at');
+        $show->total_time_taken('total_time_taken');
+        $show->completed_at('completed_at');
+        $show->status('status');
+        $show->created_at(trans('admin.created_at'));
+        $show->updated_at(trans('admin.updated_at'));
+
         return $show;
     }
 
@@ -122,32 +139,23 @@ class QuestionCrudController extends Controller
      *
      * @return Form
      */
-    protected function form($id='')
+    protected function form()
     {
-        $form = new Form(new Question);
+        $form = new Form(new TestSession);
 
-        $form->column(1/4, function ($form) {
-            $form->text('question', __('admin.question'))->required();
-            $form->select('test_id', __('admin.category'))->options('/admin/test/api')->required();
-            $form->select('question_type_id', __('admin.type'))->options('/admin/question_type/api')->required();
-            $form->switch('skippable', __('skippable'));
-            $form->number('position', __('position'));
-            $form->text('trait');
-            $form->image('image', __('Image'));
-        });
-        $form->column(3/4, function ($form) {
-            $form->summernote('hint', __('admin.description'));
-            $form->divider('Answer Options');
-            $form->table('options', __('options'), function ($form) {
-                $form->text('label');
-                $form->text('value');
-                $form->number('score');
-                $form->text('trait');
-                $form->file('image')->rules('mimes:jpg,png,gif');
-            });
-
-        });
-
+        $form->display('ID');
+        $form->text('user_id', 'user_id');
+        $form->text('test_id', 'test_id');
+        $form->text('code', 'code');
+        $form->text('result', 'result');
+        $form->text('current_question', 'current_question');
+        $form->text('start_at', 'start_at');
+        $form->text('end_at', 'end_at');
+        $form->text('total_time_taken', 'total_time_taken');
+        $form->text('completed_at', 'completed_at');
+        $form->text('status', 'status');
+        $form->display(trans('admin.created_at'));
+        $form->display(trans('admin.updated_at'));
 
         return $form;
     }

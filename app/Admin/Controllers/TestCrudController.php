@@ -81,13 +81,23 @@ class TestCrudController extends Controller
     {
         $grid = new Grid(new Test);
 
-        $grid->id('id', __('ID'));
+        $grid->column('id', __('ID'));
         $grid->code('code', __('Code'));
         $grid->slug('slug', __('Slug'));
-        $grid->name('name', __('Name'));
+        $grid->name('name', __('Name'))->editable();
         // $grid->column('image', __('Image'))->image('', 48, 48);
         $grid->column('category.name',  __('Category'))->label('info');
         $grid->column('test_type.name',  __('Type'));
+
+        $grid->manage('Manage');
+        $grid->rows(function($row, $manage) {
+            $id = $row->column('id');
+            $content = "<a href='test_scores?test_id={$id}'>Scores</a> / 
+            <a href='questions?test_id={$id}'>Questions</a> /
+            <a href='test_sessions?test_id={$id}'>Sessions</a>";
+            $row->column('manage', $content);
+            
+        });
 
         return $grid;
     }
