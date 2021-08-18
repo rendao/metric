@@ -153,7 +153,7 @@ class TestCrudController extends Controller
             $form->fieldset('Addons', function (Form $form) {
                 $form->url('compute_api', __('API'));
                 $form->switch('compute_api_enabled', __('API Enabled'));
-                $form->select('template_id', __('Template'))->options('/admin/template/api');
+                $form->select('template_id', __('Template'))->options('/admin/test_template/api');
                 $form->switch('template_enabled', __('Template Enabled'));
             });
         });
