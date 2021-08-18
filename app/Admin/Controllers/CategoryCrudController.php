@@ -92,8 +92,11 @@ class CategoryCrudController extends Controller
         $grid->slug('slug');
         $grid->image('image');
         $grid->description('description');
-        // route('tests',array('category_id' => 1))
-        $grid->column('id', 'Tests')->show('tests');
+        
+        $grid->column('tests')->display(function () {
+            $id = $this->id;
+            return '<a href="tests?category_id='.$id.'"><i class="fa fa-list-ol" /></a>';
+        });
 
         return $grid;
     }
