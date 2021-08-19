@@ -2,98 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-
 use App\Models\User;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+    use ApiResponser;
 
-    /**
-     * login https://laravel.com/docs/5.8/api-authentication
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function login(Request $request)
-    {   
-        // $array = array('foo', 'bar');
-        // return $array;
-        $credentials = array(
-            'name' => $request->name,
-            'password' => $request->password
-        );
-        if(!Auth::attempt($credentials, $request->remember = true))
-        {
-            $result = array(
-                'data' => $request->all(),
-                'message' => 'Password is not match',
-                'code' => -1
-            );
-            return $result;
-        }
-
-        $user = Auth::user();
-
-        if (auth()->attempt($credentials)) {
-            $token = $this->update($request);
-            return response()->json($token, 200);
-        } else {
-            return response()->json(['error' => 'UnAuthorised'], 401);
-        }
-        // $user['accessToken'] = $user->createToken(ENV('APP_NAME'))->accessToken;
-    }
-
-    /**
-     * register.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function register(Request $request)
     {
-        $result = User::where("email", $request->get('email'))->get();
-
-        if(!$result->isEmpty())
-            return $result;
-        $data = $request->all();
-        
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password'])
+        $attr = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed'
         ]);
 
-        $token = $this->update($request);
+        $user = User::create([
+            'name' => $attr['name'],
+            'password' => bcrypt($attr['password']),
+            'email' => $attr['email']
+        ]);
 
-        return response()->json($token, 200);
+        return $this->success([
+            'token' => $user->createToken('API Token')->plainTextToken
+        ]);
     }
 
-    public function update(Request $request)
+    public function login(Request $request)
     {
-        $token = Str::random(60);
+        $attr = $request->validate([
+            'email' => 'required|string|email|',
+            'password' => 'required|string|min:6'
+        ]);
 
-        $request->user()->forceFill([
-            'api_token' => hash('sha256', $token),
-        ])->save();
+        if (!Auth::attempt($attr)) {
+            return $this->error('Credentials not match', 401);
+        }
 
-        return ['token' => $token];
+        return $this->success([
+            'token' => auth()->user()->createToken('API Token')->plainTextToken
+        ]);
     }
 
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
 
+        return [
+            'message' => 'Tokens Revoked'
+        ];
+    }
 }
