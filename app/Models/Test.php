@@ -56,7 +56,6 @@ class Test extends Model
        static::creating(function ($category) {
            $category->attributes['code'] = 'T-'.Str::random(11);
        });
-   }
-   
+   } 
 
 }

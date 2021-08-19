@@ -20,6 +20,7 @@ class CreateCategoriesTable extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->string('image', 2048)->nullable();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

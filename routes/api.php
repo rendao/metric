@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,14 +20,19 @@ use App\Http\Controllers\Api\HomeController;
 
 Route::group([], function(){
     Route::any('home', [HomeController::class, 'index']);
+    Route::any('category', [CategoryController::class, 'index']);
+    // Route::any('tests/{category:slug}', [TestController::class, 'category']);
     Route::any('login', [AuthController::class, 'login']);
     Route::any('register', [AuthController::class, 'register']);
 });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::middleware(['auth:api'])->prefix('user')->group(function () {
+    Route::get('profile', function (Request $request) {
+            return $request->user();
+    });
     Route::any('dashboard', 'UserController@dashboard');
 });
