@@ -20,4 +20,24 @@ class CategoryController extends Controller
         return response()->json($data, 200);
     }
 
+    public function tests($id)
+    {
+        $where = array(
+            'is_active' =>  1
+        );
+
+        if ($id) {
+            $where['category_id'] = $id;
+        }
+
+        $tests = Test::where($where)->orderBy('id', 'desc')->paginate(10);
+
+        $data = [
+            'where' => $where,
+            'code' => $id,
+            'data' => $tests
+        ];
+        return response()->json($data, 200);
+    }
+
 }

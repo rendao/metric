@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +21,10 @@ use App\Http\Controllers\Api\CategoryController;
 
 Route::group([], function(){
     Route::any('home', [HomeController::class, 'index']);
-    Route::any('category', [CategoryController::class, 'index']);
-    // Route::any('tests/{category:slug}', [TestController::class, 'category']);
+    Route::any('categories', [CategoryController::class, 'index']);
+    Route::any('categories/{category:id}', [CategoryController::class, 'tests']);
+
+    Route::any('tests', [TestController::class, 'index']);
     Route::any('login', [AuthController::class, 'login']);
     Route::any('register', [AuthController::class, 'register']);
 });
