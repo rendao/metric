@@ -31,12 +31,16 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {   
-        // $array = array('foo', 'bar');
-        // return $array;
+        $validatedData = $request->validate([
+            'name' => ['required', 'unique:posts', 'min:3'],
+            'password' => ['required']
+        ]);
+        
         $credentials = array(
             'name' => $request->name,
             'password' => $request->password
         );
+
         if(!Auth::attempt($credentials, $request->remember = true))
         {
             $result = array(

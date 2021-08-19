@@ -161,9 +161,6 @@ class TestCrudController extends Controller
             });
         });
 
-        // $type = $id ? Factor::where('id', $id)->value('type') : 1;
-        // $form->select('type','Type')->options(['1'=>'For Question','2'=>'For Answer'])->default($type);
-
         return $form;
     }
 
