@@ -13,7 +13,7 @@ class CategoryController extends Controller
     
     public function index()
     {
-        $categories = Category::where('is_active', '=', 1)->orderBy('id', 'desc')->paginate(10);
+        $categories = Category::where('is_active', '=', 1)->orderBy('id', 'desc')->get();
         $data = [
             'data' => $categories
         ];
