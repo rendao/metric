@@ -18,6 +18,13 @@ class AddApiTokenToUsersTable extends Migration
                                 ->unique()
                                 ->nullable()
                                 ->default(null);
+            $table->dateTime('last_login_at')->before('created_at')
+            ->nullable()
+            ->default(null);
+
+            $table->string('last_login_ip')->before('created_at')
+            ->nullable()
+            ->default(null);
         });
     }
 
@@ -30,6 +37,7 @@ class AddApiTokenToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
+            $table->dropColumn('api_token', 'last_login_at', 'last_login_ip');
         });
     }
 }

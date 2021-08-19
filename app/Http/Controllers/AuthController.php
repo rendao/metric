@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
+use Carbon\Carbon;
 use App\Models\User;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
@@ -56,7 +55,6 @@ class AuthController extends Controller
         } else {
             return response()->json(['error' => 'UnAuthorised'], 401);
         }
-        // $user['accessToken'] = $user->createToken(ENV('APP_NAME'))->accessToken;
     }
 
     /**
@@ -90,6 +88,8 @@ class AuthController extends Controller
 
         $request->user()->forceFill([
             'api_token' => hash('sha256', $token),
+            'last_login_at' => Carbon::now()->toDateTimeString(),
+            'last_login_ip' => $request->getClientIp()
         ])->save();
 
         return ['token' => $token];
