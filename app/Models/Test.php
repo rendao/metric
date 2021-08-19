@@ -15,6 +15,12 @@ class Test extends Model
     use HasFactory;
 
     protected $table = 'tests';
+
+    protected $hidden = [
+        'compute_api',
+        'created_at',
+        'updated_at'
+    ];
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -51,6 +57,6 @@ class Test extends Model
            $category->attributes['code'] = 'T-'.Str::random(11);
        });
    }
-
+   
 
 }

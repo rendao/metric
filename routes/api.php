@@ -3,7 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group([], function(){
-    Route::any('login','AuthController@login');
-    Route::any('register', 'AuthController@register');
+    Route::any('home', [HomeController::class, 'index']);
+    Route::any('login', [AuthController::class, 'login']);
+    Route::any('register', [AuthController::class, 'register']);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
