@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/register', [AuthController::class, 'register']);
 
-Route::post('/auth/login', [AuthController::class, 'login']);
+Route::any('/auth/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', function(Request $request) {
@@ -31,15 +31,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 // TODO
 
-Route::group([], function(){
-    Route::any('login','AuthController@login');
-    Route::any('register', 'AuthController@register');
-});
+// Route::group([], function(){
+//     Route::any('login','AuthController@login');
+//     Route::any('register', 'AuthController@register');
+// });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::middleware(['auth:api'])->prefix('user')->group(function () {
-    Route::any('dashboard', 'UserController@dashboard');
-});
+// Route::middleware(['auth:api'])->prefix('user')->group(function () {
+//     Route::any('dashboard', 'UserController@dashboard');
+// });

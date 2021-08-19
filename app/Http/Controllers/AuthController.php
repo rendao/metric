@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Traits\ApiResponser;
+
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -14,6 +15,8 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        $request->headers->set('accept', 'application/json');
+        
         $attr = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users,email',
@@ -27,12 +30,14 @@ class AuthController extends Controller
         ]);
 
         return $this->success([
-            'token' => $user->createToken('API Token')->plainTextToken
+            'token' => $user->createToken('Metric-Token')->plainTextToken
         ]);
     }
 
     public function login(Request $request)
     {
+        $request->headers->set('accept', 'application/json');
+
         $attr = $request->validate([
             'email' => 'required|string|email|',
             'password' => 'required|string|min:6'
@@ -43,7 +48,7 @@ class AuthController extends Controller
         }
 
         return $this->success([
-            'token' => auth()->user()->createToken('API Token')->plainTextToken
+            'token' => auth()->user()->createToken('Metric-Token')->plainTextToken
         ]);
     }
 
