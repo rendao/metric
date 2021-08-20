@@ -112,7 +112,7 @@ class TestController extends Controller
      */
     public function goto(Test $test, $session_code)
     {
-        $session = TestSession::with('questions')->where('code', $session_code)->firstOrFail();
+        $session = TestSession::where('code', $session_code)->firstOrFail();
 
         // TODO: if completed, update and redirect to finish.
         $questions = $test->questions()->with(['question_type:id,name,code', 'question_session' => function($query) {
@@ -120,7 +120,7 @@ class TestController extends Controller
         }])->get();
 
         $data = [
-            'test' => $test->only('code', 'title', 'slug', 'total_questions'),
+            'test' => $test->only('code', 'slug', 'name', 'total_questions', 'duration'),
             'questions' => $questions,
             'session' => $session,
             'answered_count' => $session->questions()->wherePivot('status', '=', 'answered')->count()

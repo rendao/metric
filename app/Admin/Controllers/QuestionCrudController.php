@@ -88,8 +88,10 @@ class QuestionCrudController extends Controller
         $grid = new Grid(new Question);
 
         $test_id = request('test_id');
-        $grid->model()->where('test_id', '=', $test_id);
-
+        if ($test_id) {
+            $grid->model()->where('test_id', '=', $test_id);
+        }
+        
         $grid->id( __('admin.id'));
         $grid->question(__('admin.question'));
         $grid->code(__('admin.code'));

@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'True or False', 'code' => 'TOF', 'type' => 'objective', 'description' => 'Yes/No, Correct/Incorrect, and Agree/Disagree.', 'is_active' => 1],
             ['name' => 'Consecutive Input', 'code' => 'CI', 'type' => 'objective', 'description' => 'Consecutive Input', 'is_active' => 1],
             ['name' => 'Matrix', 'code' => 'MT', 'type' => 'objective', 'description' => 'Matrix', 'is_active' => 1],
+            ['name' => 'Free Text', 'code' => 'FT', 'type' => 'subjective', 'description' => 'Free Text', 'is_active' => 1],
         ]);
     }
 }
