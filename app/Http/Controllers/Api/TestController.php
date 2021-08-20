@@ -67,7 +67,6 @@ class TestController extends Controller
      */
     public function init(Test $test)
     {
-
         $sessions = $test->sessions()->where('status', '=', 'started');
 
         if ($sessions->count() > 0) {

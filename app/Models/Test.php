@@ -65,7 +65,7 @@ class Test extends Model
    protected static function booted()
    {
        static::creating(function ($m) {
-           $m->attributes['code'] = 'T-'.Str::random(11);
+           $m->attributes['code'] = 'T'.Str::random(11);
        });
    } 
 

@@ -15,7 +15,7 @@ class TestTemplate extends Model
     protected static function booted()
     {
         static::creating(function ($test_templates) {
-            $test_templates->attributes['code'] = 'TT-'.Str::random(11);
+            $test_templates->attributes['code'] = 'TP'.Str::random(10);
         });
     }
 }

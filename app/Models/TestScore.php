@@ -19,7 +19,7 @@ class TestScore extends Model
     protected static function booted()
     {
         static::creating(function ($test_scores) {
-            $test_scores->attributes['code'] = 'S-'.Str::random(11);
+            $test_scores->attributes['code'] = 'S'.Str::random(11);
         });
     }
 

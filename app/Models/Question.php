@@ -69,7 +69,7 @@ class Question extends Model
    protected static function booted()
    {
        static::creating(function ($question) {
-           $question->attributes['code'] = 'Q-'.Str::random(11);
+           $question->attributes['code'] = 'Q'.Str::random(11);
        });
    }
 }
