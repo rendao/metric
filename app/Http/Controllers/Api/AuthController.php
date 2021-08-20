@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Traits\ApiResponser;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+
 
 class AuthController extends Controller
 {
@@ -15,7 +16,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $request->headers->set('accept', 'application/json');
+        // $request->headers->set('accept', 'application/json');
         
         $attr = $request->validate([
             'name' => 'required|string|max:255',
@@ -36,7 +37,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->headers->set('accept', 'application/json');
+        // $request->headers->set('accept', 'application/json');
 
         $attr = $request->validate([
             'email' => 'required|string|email|',
