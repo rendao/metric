@@ -37,7 +37,8 @@ Route::middleware(['auth:sanctum'])->prefix('user')->group(function () {
 Route::group([], function(){
     Route::any('home', [HomeController::class, 'index']);
     Route::any('categories', [CategoryController::class, 'index']);
-    Route::any('categories/{category:id}', [CategoryController::class, 'tests']);
+    Route::any('category/{category:id}', [CategoryController::class, 'tests']);
     Route::any('tests', [TestController::class, 'index']);
-
+    Route::any('test/{test:code}', [TestController::class, 'show']);
+    Route::any('test/{test:code}/questions', [TestController::class, 'questions']);
 });

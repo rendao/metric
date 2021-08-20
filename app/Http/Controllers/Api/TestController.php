@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Test;
+use App\Models\Category;
+use App\Models\Question;
 
 class TestController extends Controller
 {
@@ -19,6 +21,31 @@ class TestController extends Controller
         $tests = Test::where('is_active', '=', 1)->orderBy('id', 'desc')->paginate(10);
         $data = [
             'data' => $tests
+        ];
+        return response()->json($data, 200);
+    }
+
+    public function show($code)
+    {
+        $where = array(
+            'code' => $code,
+            'is_active' => 1
+        );
+        $test= Test::where($where)->with(['category:id,code,name'])->withCount(['questions'])->firstOrFail();
+        $data = [
+            'data' => $test
+        ];
+        return response()->json($data, 200);
+    }
+
+    public function questions($code)
+    {
+        $where = array(
+            'code' => $code
+        );
+        $questions= Test::where($where)->with(['questions'])->withCount(['questions'])->firstOrFail();
+        $data = [
+            'data' => $questions
         ];
         return response()->json($data, 200);
     }
@@ -40,17 +67,6 @@ class TestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
     {
         //
     }
