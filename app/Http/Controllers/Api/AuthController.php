@@ -3,101 +3,61 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
-use Carbon\Carbon;
 use App\Models\User;
+use App\Traits\ApiResponser;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+    use ApiResponser;
 
-    /**
-     * login https://laravel.com/docs/5.8/api-authentication
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function login(Request $request)
-    {   
-        $validatedData = $request->validate([
-            'name' => ['required', 'unique:posts', 'min:3'],
-            'password' => ['required']
-        ]);
-        
-        $credentials = array(
-            'name' => $request->name,
-            'password' => $request->password
-        );
-
-        if(!Auth::attempt($credentials, $request->remember = true))
-        {
-            $result = array(
-                'data' => $request->all(),
-                'message' => 'Password is not match',
-                'code' => -1
-            );
-            return $result;
-        }
-
-        $user = Auth::user();
-
-        if (auth()->attempt($credentials)) {
-            $token = $this->update($request);
-            return response()->json($token, 200);
-        } else {
-            return response()->json(['error' => 'UnAuthorised'], 401);
-        }
-    }
-
-    /**
-     * register.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function register(Request $request)
     {
-        $result = User::where("email", $request->get('email'))->get();
-
-        if(!$result->isEmpty())
-            return $result;
-        $data = $request->all();
+        $request->headers->set('accept', 'application/json');
         
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password'])
+        $attr = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed'
         ]);
 
-        $token = $this->update($request);
+        $user = User::create([
+            'name' => $attr['name'],
+            'password' => bcrypt($attr['password']),
+            'email' => $attr['email']
+        ]);
 
-        return response()->json($token, 200);
+        return $this->success([
+            'token' => $user->createToken('Metric-Token')->plainTextToken
+        ]);
     }
 
-    public function update(Request $request)
+    public function login(Request $request)
     {
-        $token = Str::random(60);
+        $request->headers->set('accept', 'application/json');
 
-        $request->user()->forceFill([
-            'api_token' => hash('sha256', $token),
-            'last_login_at' => Carbon::now()->toDateTimeString(),
-            'last_login_ip' => $request->getClientIp()
-        ])->save();
+        $attr = $request->validate([
+            'email' => 'required|string|email|',
+            'password' => 'required|string|min:6'
+        ]);
 
-        return ['token' => $token];
+        if (!Auth::attempt($attr)) {
+            return $this->error('Credentials not match', 401);
+        }
+
+        return $this->success([
+            'token' => auth()->user()->createToken('Metric-Token')->plainTextToken
+        ]);
     }
 
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
 
+        return [
+            'message' => 'Tokens Revoked'
+        ];
+    }
 }
