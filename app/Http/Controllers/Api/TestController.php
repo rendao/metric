@@ -72,7 +72,7 @@ class TestController extends Controller
 
         if ($sessions->count() > 0) {
             $session = $test->sessions()->where('user_id', auth()->user()->id)->latest()->first();
-            $this->goto($test, $session->code);
+            return $this->goto($test, $session->code);
         } else {
             return $this->start($test);
         }
@@ -114,11 +114,17 @@ class TestController extends Controller
     {
         $session = TestSession::with('questions')->where('code', $session_code)->firstOrFail();
 
+        // TODO: if completed, update and redirect to finish.
+        $questions = $test->questions()->with(['question_type:id,name,code'])->get();
+
         $data = [
-            'data' => $session
+            'test' => $test->only('code', 'title', 'slug', 'total_questions'),
+            'questions' => $questions,
+            'session' => $session,
+            'answered_count' => $session->questions()->wherePivot('status', '=', 'answered')->count()
         ];
         return response()->json($data, 200);
     }
-    // TODO: goto(), start(), answer(), finish().
+    // TODO: goto(), start(), answer(), finish(), result(), thanks().
    
 }

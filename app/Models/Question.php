@@ -14,6 +14,7 @@ class Question extends Model
     use HasFactory;
 
     protected $table = 'questions';
+    protected $hidden = ['created_at', 'updated_at'];
 
     protected $casts = [
         'options' => 'json',

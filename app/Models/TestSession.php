@@ -16,6 +16,7 @@ class TestSession extends Model
 
     protected $table = 'test_sessions';
     protected $fillable = ['test_id', 'user_id', 'start_at', 'end_at', 'status'];
+    protected $hidden = ['created_at', 'updated_at'];
 
     // protected $appends = ['total_time_taken'];
     // Computed
@@ -41,7 +42,7 @@ class TestSession extends Model
     public function questions()
     {
         return $this->belongsToMany(Question::class, 'question_sessions')
-            ->withPivot('status', 'options', 'time_taken');
+            ->withPivot('status', 'option', 'duration');
     }
 
     protected static function booted()
