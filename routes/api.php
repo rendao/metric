@@ -32,6 +32,11 @@ Route::middleware(['auth:sanctum'])->prefix('user')->group(function () {
     Route::get('/profile', function(Request $request) {
         return auth()->user();
     });
+
+    Route::get('/test/{test:code}/init', [TestController::class, 'init'])->name('test_init');
+    Route::get('/test/{test:code}/{session}', [TestController::class, 'session'])->name('test_session');
+    Route::get('/test/{test:code}/{session}/update', [TestController::class, 'update'])->name('test_update');
+
 });
 
 Route::group([], function(){

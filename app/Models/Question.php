@@ -28,10 +28,15 @@ class Question extends Model
     {
       return $this->belongsTo(Test::class, 'test_id', 'id');
     }
-
+  
     public function question_type()
     {
       return $this->belongsTo(QuestionType::class, 'question_type_id', 'id');
+    }
+
+    public function tests()
+    {
+        return $this->belongsToMany(Test::class, 'questions', 'question_id', 'test_id');
     }
 
     public function sluggable(): array

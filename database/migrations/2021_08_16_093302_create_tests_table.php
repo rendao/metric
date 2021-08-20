@@ -19,10 +19,12 @@ class CreateTestsTable extends Migration
             $table->unsignedBigInteger('test_type_id');
             $table->string('name');
             $table->string('code')->unique();
-            $table->string('slug')->unique();
+            $table->string('slug')->unique()->nullable();
             $table->text('image')->nullable();
             $table->text('short_description')->nullable();
             $table->longText('description')->nullable();
+            $table->unsignedInteger('total_questions')->default(0);
+            $table->unsignedInteger('duration')->nullable();
             $table->text('compute_api')->nullable();
             $table->boolean('compute_api_enabled')->default(0);
             $table->integer('template_id')->nullable();

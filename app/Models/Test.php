@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\TestType;
 use App\Models\TestTemplate;
 use App\Models\Question;
+use App\Models\TestSession;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -47,6 +48,11 @@ class Test extends Model
         return $this->hasMany(Question::class, 'test_id', 'id');
     }
 
+    public function sessions()
+    {
+        return $this->hasMany(TestSession::class);
+    }
+
     public function sluggable(): array
     {
         return [
@@ -58,8 +64,8 @@ class Test extends Model
 
    protected static function booted()
    {
-       static::creating(function ($category) {
-           $category->attributes['code'] = 'T-'.Str::random(11);
+       static::creating(function ($m) {
+           $m->attributes['code'] = 'T-'.Str::random(11);
        });
    } 
 

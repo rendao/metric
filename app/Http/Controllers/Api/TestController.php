@@ -8,13 +8,16 @@ use Illuminate\Http\Request;
 use App\Models\Test;
 use App\Models\Category;
 use App\Models\Question;
+use App\Models\TestSession;
+use App\Models\QuestionSession;
+
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class TestController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -24,6 +27,10 @@ class TestController extends Controller
         ];
         return response()->json($data, 200);
     }
+
+    /**
+     * Display single resource.
+     */
 
     public function show($code)
     {
@@ -38,8 +45,13 @@ class TestController extends Controller
         return response()->json($data, 200);
     }
 
+    /**
+     * Display question list belong to this test.
+     */
     public function questions($code)
     {
+        // $session = QuizSession::with('questions')->where('code', $session)->firstOrFail();
+
         $where = array(
             'code' => $code
         );
@@ -51,57 +63,62 @@ class TestController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * init a test session.
      */
-    public function create()
+    public function init(Test $test)
     {
-        //
+
+        $sessions = $test->sessions()->where('status', '=', 'started');
+
+        if ($sessions->count() > 0) {
+            $session = $test->sessions()->where('user_id', auth()->user()->id)->latest()->first();
+            $this->goto($test, $session->code);
+        } else {
+            return $this->start($test);
+        }
+
+        $data = [
+            'data' => $sessions
+        ];
+        return response()->json($data, 200);
+
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * start a new test session.
      */
-    public function store(Request $request)
+    public function start(Test $test)
     {
-        //
+        
+        $now = Carbon::now();
+        $questions = $test->questions()->with(['question_type:id,name,code'])->get();
+
+        $session = TestSession::create([
+            'test_id' => $test->id,
+            'user_id' => auth()->user()->id,
+            'start_at' => $now->toDateTimeString(),
+            'end_at' => $now->addSeconds($test->total_time_taken)->toDateTimeString(),
+            'status' => 'started'
+        ]);
+
+        $data = [
+            'data' => $session
+        ];
+        return response()->json($data, 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * jump to a exist test session.
      */
-    public function edit($id)
+    public function goto(Test $test, $session_code)
     {
-        //
-    }
+        $session = TestSession::with('questions')->where('code', $session_code)->firstOrFail();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        $data = [
+            'data' => $session
+        ];
+        return response()->json($data, 200);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    // TODO: goto(), start(), answer(), finish().
+   
 }
