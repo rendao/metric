@@ -115,7 +115,9 @@ class TestController extends Controller
         $session = TestSession::with('questions')->where('code', $session_code)->firstOrFail();
 
         // TODO: if completed, update and redirect to finish.
-        $questions = $test->questions()->with(['question_type:id,name,code'])->get();
+        $questions = $test->questions()->with(['question_type:id,name,code', 'question_session' => function($query) {
+            $query->where('user_id', auth()->user()->id)->latest()->first();
+        }])->get();
 
         $data = [
             'test' => $test->only('code', 'title', 'slug', 'total_questions'),

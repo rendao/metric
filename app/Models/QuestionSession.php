@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class QuestionSession extends Model
 {
     protected $table = 'question_sessions';
+    protected $hidden = ['created_at', 'updated_at'];
 
     public function user()
     {

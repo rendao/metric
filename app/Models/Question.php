@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Test;
 use App\Models\QuestionType;
+use App\Models\QuestionSession;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +34,11 @@ class Question extends Model
     public function question_type()
     {
       return $this->belongsTo(QuestionType::class, 'question_type_id', 'id');
+    }
+
+    public function question_session()
+    {
+      return $this->hasMany(QuestionSession::class);
     }
 
     public function tests()
