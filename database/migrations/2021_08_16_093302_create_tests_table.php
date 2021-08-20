@@ -23,7 +23,7 @@ class CreateTestsTable extends Migration
             $table->text('image')->nullable();
             $table->text('short_description')->nullable();
             $table->longText('description')->nullable();
-            $table->unsignedInteger('total_questions')->default(0);
+            $table->unsignedInteger('total')->default(0);
             $table->unsignedInteger('duration')->nullable();
             $table->text('compute_api')->nullable();
             $table->boolean('compute_api_enabled')->default(0);

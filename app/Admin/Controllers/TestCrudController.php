@@ -91,7 +91,7 @@ class TestCrudController extends Controller
         $grid->code('code', __('Code'));
         $grid->slug('slug', __('Slug'));
         $grid->name('name', __('Name'))->editable();
-        $grid->column('total_questions', __('Questions'));
+        $grid->column('total', __('Questions'));
         $grid->column('duration', __('Duration'));
         // $grid->column('image', __('Image'))->image('', 48, 48);
         $grid->column('category.name',  __('Category'))->label('info');
@@ -149,7 +149,7 @@ class TestCrudController extends Controller
             $form->select('category_id', __('Category'))->options('/admin/category/api')->required();
             $form->select('test_type_id', __('Type'))->options('/admin/test_type/api')->required();
             $form->text('name', __('Name'))->required();
-            $form->number('total_questions', 'Total Questions');
+            $form->number('total', 'Total Questions');
             $form->number('duration', 'Duration');
             $form->text('slug', __('Slug'));
             $form->textarea('short_description', __('Short Description'));  

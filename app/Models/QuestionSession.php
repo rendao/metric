@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 class QuestionSession extends Model
 {
     protected $table = 'question_sessions';
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['user_id', 'test_id', 'test_session_id', 'question_id', 'trait', 'option', 'duration', 'status'];
+    protected $hidden = ['question_id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function user()
     {
