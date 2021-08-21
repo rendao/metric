@@ -101,7 +101,7 @@ class TestController extends Controller
         // TODO: if completed, update and redirect to finish.
         $questions = $test->questions()->with(['question_type:id,name,code', 'question_session' => function($query) {
             $query->where('user_id', auth()->user()->id)->select(['question_id', 'status', 'duration'])->latest()->first();
-        }])->get();
+        }])->get()->makeHidden(['id']);
 
         $data = [
             'test' => $test->only('code', 'slug', 'name', 'total', 'duration'),
