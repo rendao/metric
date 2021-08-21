@@ -7,10 +7,13 @@ use App\Models\QuestionSession;
 
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Layout\Row;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Tab;
+
 
 class TestSessionController extends Controller
 {
@@ -38,10 +41,14 @@ class TestSessionController extends Controller
      */
     public function show($id, Content $content)
     {
+        $tab = new Tab();
+        $tab->add('Origin', $this->detail($id));
+        $tab->add('Report', $this->report($id));
+
         return $content
             ->header(trans('admin.detail'))
             ->description(trans('admin.description'))
-            ->body($this->detail($id));
+            ->body($tab);
     }
 
     /**
@@ -133,7 +140,6 @@ class TestSessionController extends Controller
     protected function detail($id)
     {
         $show = new Show(TestSession::findOrFail($id));
-
         $show->id('ID');
         $show->user_id('user_id');
         $show->test_id('test_id');
@@ -142,12 +148,19 @@ class TestSessionController extends Controller
         $show->current_question('current_question');
         $show->start_at('start_at');
         $show->end_at('end_at');
-        $show->total_time_taken('total_time_taken');
+        $show->duration('duration');
         $show->completed_at('completed_at');
         $show->status('status');
         $show->created_at(trans('admin.created_at'));
         $show->updated_at(trans('admin.updated_at'));
+        
+        return $show;
+    }
 
+    public function report($id)
+    {
+        $show = new Show(TestSession::findOrFail($id));
+        $show->result('result');
         return $show;
     }
 
