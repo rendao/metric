@@ -84,8 +84,12 @@ class TestSessionController extends Controller
 
         $grid->filter(function($filter){
             $filter->disableIdFilter();
-            $filter->like('user_id', 'User ID');
-            $filter->like('test_id', 'Test ID');
+            $filter->column(1/2, function ($filter) {
+                $filter->equal('test_id', 'Test ID');
+            });
+            $filter->column(1/2, function ($filter) {
+                $filter->equal('user_id', 'User ID');
+            });
         });
 
         $grid->disableCreation();

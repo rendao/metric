@@ -92,7 +92,7 @@ class QuestionSessionController extends Controller
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
             $filter->like('user.name', 'User');
-            $filter->like('test_session_id', 'Test Session ID');
+            $filter->equal('test_session_id', 'Test Session ID');
         });
 
         $grid->disableCreation();

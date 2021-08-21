@@ -83,7 +83,7 @@ class TestCrudController extends Controller
         $grid = new Grid(new Test);
 
         $grid->filter(function($filter){
-            $filter->like('category_id', 'Category ID');
+            $filter->equal('category_id', 'Category ID');
         });
 
         $grid->column('id', 'ID');

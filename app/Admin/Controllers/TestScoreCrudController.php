@@ -84,7 +84,9 @@ class TestScoreCrudController extends Controller
 
         $grid->filter(function($filter){
             $filter->disableIdFilter();
-            $filter->like('test_id', 'Test ID');
+            $filter->column(1/2, function ($filter) {
+                $filter->equal('test_id', 'Test ID');
+            });
         });
 
         $grid->actions(function ($actions) {
@@ -92,8 +94,8 @@ class TestScoreCrudController extends Controller
         });
 
         $grid->id('ID');
-        $grid->code('code');
-        $grid->column('test.id', __('test'));
+        // $grid->code('Code');
+        $grid->column('test.id', __('Test ID'));
         $grid->trait('trait');
         $grid->start('start');
         $grid->end('end');

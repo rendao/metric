@@ -88,7 +88,12 @@ class QuestionCrudController extends Controller
         $grid = new Grid(new Question);
         
         $grid->filter(function($filter){
-            $filter->like('test_id', 'Test ID');
+            $filter->column(1/2, function ($filter) {
+                $filter->equal('test_id', 'Test ID');
+            });
+            $filter->column(1/2, function ($filter) {
+                $filter->like('test.name', 'Test Name');
+            });
         });
 
         $grid->id( __('admin.id'));
