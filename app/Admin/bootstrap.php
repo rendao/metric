@@ -23,8 +23,8 @@ Encore\Admin\Form::forget(['map', 'editor']);
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid\Column;
 
-Column::extend('show', function ($value, $href) {
-    return "<a href='$href/$value'>$value</a>";
+Column::extend('jumpto', function ($value, $link) {
+    return "<a href='$link$value'>$value</a>";
 });
 
 

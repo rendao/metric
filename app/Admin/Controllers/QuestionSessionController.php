@@ -2,8 +2,13 @@
 
 namespace App\Admin\Controllers;
 
+use Illuminate\Http\Request;
+
+use App\Models\User;
+use App\Models\TestSession;
 use App\Models\QuestionSession;
 use App\Http\Controllers\Controller;
+
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -20,12 +25,13 @@ class QuestionSessionController extends Controller
      * @param Content $content
      * @return Content
      */
-    public function index(Content $content)
+    public function index(TestSession $test_session, Content $content)
     {
+        $test_session_id = $test_session->id;
         return $content
             ->header(trans('admin.index'))
             ->description(trans('admin.description'))
-            ->body($this->grid());
+            ->body($this->grid($test_session_id));
     }
 
     /**
@@ -77,24 +83,31 @@ class QuestionSessionController extends Controller
      *
      * @return Grid
      */
-    protected function grid()
+    protected function grid($test_session_id)
     {
+
         $grid = new Grid(new QuestionSession);
+
+        $grid->filter(function($filter){
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            $filter->like('user.name', 'User');
+            $filter->like('test_session_id', 'Test Session ID');
+        });
 
         $grid->disableCreation();
         $grid->actions(function ($actions) {
             $actions->disableEdit();
         });
 
-        $grid->id('ID');
         $grid->column('user.name', 'User');
+        $grid->column('test_session_id', 'Test Session');
         $grid->column('test.name', 'Test');
-        $grid->column('question.id', 'QID');
-        $grid->column('test_session.id', 'Test Session');
+        $grid->column('question.question', 'Question');
 
         $grid->trait('trait');
         $grid->column('option', 'Option');
-        $grid->time_taken('time_taken');
+        $grid->duration('Duration');
         $grid->status('status');
         $grid->skipped('skipped');
 

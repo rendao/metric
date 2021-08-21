@@ -26,13 +26,14 @@ Route::group([
 
     $router->resource('test_scores', TestScoreCrudController::class);
     $router->resource('test_sessions', TestSessionController::class);
+
     $router->resource('test_templates', TestTemplateCrudController::class);
     $router->any('test_template/api', 'TestTemplateCrudController@api');
-    
 
     $router->get('question_types', 'QuestionTypeCrudController@index');
     $router->any('question_type/api', 'QuestionTypeCrudController@api');
     $router->resource('questions', QuestionCrudController::class);
+
     $router->resource('question_sessions', QuestionSessionController::class);
 
 });

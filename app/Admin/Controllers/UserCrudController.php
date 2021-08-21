@@ -59,7 +59,10 @@ class UserCrudController extends Controller
     {
         $grid = new Grid(new User);
 
-        $grid->column('id', __('ID'));
+        $grid->column('id', 'ID')->display(function ($id, $column) {
+            $link = '/admin/test_sessions?user_id='.$this->id;
+            return "<a href=$link>$this->id</a>";
+        });
         $grid->column('name', __('Name'));
         $grid->column('email', __('Email'))->editable();
         $grid->column('email_verified_at',  __('Email Verified At'));

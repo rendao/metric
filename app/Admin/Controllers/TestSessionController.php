@@ -3,6 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Models\TestSession;
+use App\Models\QuestionSession;
+
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -23,8 +25,7 @@ class TestSessionController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header(trans('admin.index'))
-            ->description(trans('admin.description'))
+            ->header(__('Test Sessions'))
             ->body($this->grid());
     }
 
@@ -81,15 +82,27 @@ class TestSessionController extends Controller
     {
         $grid = new Grid(new TestSession);
 
+        $grid->filter(function($filter){
+            $filter->disableIdFilter();
+            $filter->like('user_id', 'User ID');
+            $filter->like('test_id', 'Test ID');
+        });
+
         $grid->disableCreation();
         $grid->actions(function ($actions) {
             $actions->disableEdit();
         });
 
-        $test_id = request('test_id');
-        $grid->model()->where('test_id', '=', $test_id);
+        // $test_id = request('test_id');
+        // if ($test_id) {
+        //     $grid->model()->where('test_id', '=', $test_id);
+        // }
         
-        $grid->id('ID');
+        $grid->column('id', 'ID')->display(function ($id, $column) {
+            $link = '/admin/question_sessions?test_session_id='.$this->id;
+            return "<a href=$link>$this->id</a>";
+        });
+
         $grid->code('code');
         $grid->column('user.name', 'User');
         $grid->column('test.name', 'Test');
@@ -98,7 +111,7 @@ class TestSessionController extends Controller
         $grid->start_at('start_at');
         $grid->end_at('end_at');
         $grid->completed_at('completed_at');
-        $grid->total_time_taken('total_time_taken');
+        $grid->duration('Duration');
         $grid->result('result');
         
         $grid->status('status');
@@ -159,4 +172,5 @@ class TestSessionController extends Controller
 
         return $form;
     }
+
 }

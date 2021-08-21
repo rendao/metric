@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Test;
 use App\Models\User;
 use App\Models\Question;
+use App\Models\QuestionSession;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -39,6 +40,10 @@ class TestSession extends Model
       return $this->belongsTo(Question::class, 'current_question_id', 'id');
     }
 
+    public function question_sessions()
+    {
+      return $this->hasMany(QuestSession::class, 'test_session_id', 'id');
+    }
     public function questions()
     {
         return $this->belongsToMany(Question::class, 'question_sessions')
