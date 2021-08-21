@@ -18,7 +18,7 @@ class Test extends Model
 
     protected $table = 'tests';
 
-    protected $hidden = ['id', 'category_id', 'template_id', 'compute_api', 'created_at', 'updated_at'];
+    protected $hidden = ['category_id', 'template_id', 'compute_api', 'created_at', 'updated_at'];
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

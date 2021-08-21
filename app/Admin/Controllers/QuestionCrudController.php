@@ -86,12 +86,11 @@ class QuestionCrudController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Question);
-
-        $test_id = request('test_id');
-        if ($test_id) {
-            $grid->model()->where('test_id', '=', $test_id);
-        }
         
+        $grid->filter(function($filter){
+            $filter->like('test_id', 'Test ID');
+        });
+
         $grid->id( __('admin.id'));
         $grid->question(__('admin.question'));
         $grid->code(__('admin.code'));
@@ -128,16 +127,16 @@ class QuestionCrudController extends Controller
     {
         $form = new Form(new Question);
 
-        $form->column(1/4, function ($form) {
+        $form->column(2/5, function ($form) {
             $form->text('question', __('admin.question'))->required();
-            $form->select('test_id', __('admin.category'))->options('/admin/test/api')->required();
+            $form->select('test_id', __('admin.test'))->options('/admin/test/api')->required();
             $form->select('question_type_id', __('admin.type'))->options('/admin/question_type/api')->required();
             $form->switch('skippable', __('skippable'));
             $form->number('position', __('position'));
             $form->text('trait');
             $form->image('image', __('Image'));
         });
-        $form->column(3/4, function ($form) {
+        $form->column(3/5, function ($form) {
             $form->summernote('hint', __('admin.description'));
             $form->divider('Answer Options');
             $form->table('options', __('options'), function ($form) {

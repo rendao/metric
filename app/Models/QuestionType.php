@@ -9,5 +9,5 @@ class QuestionType extends Model
 {
     use HasFactory;
     protected $table = 'question_types';
-    protected $hidden = ['id', 'created_at', 'updated_at'];
+    protected $hidden = ['created_at', 'updated_at'];
 }
