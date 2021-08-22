@@ -81,7 +81,7 @@ class TestController extends Controller
             'test_id' => $test->id,
             'user_id' => auth()->user()->id,
             'start_at' => $now->toDateTimeString(),
-            'end_at' => $now->addSeconds($test->total_time_taken)->toDateTimeString(),
+            'end_at' => $now->addSeconds($test->duration)->toDateTimeString(),
             'status' => 'started'
         ]);
 
@@ -106,7 +106,7 @@ class TestController extends Controller
         $data = [
             'test' => $test->only('code', 'slug', 'name', 'total', 'duration'),
             'questions' => $questions,
-            'session' => $session->code,
+            'session_code' => $session->code,
             'answered_count' => $session->questions()->wherePivot('status', '=', 'answered')->count()
         ];
         return response()->json($data, 200);
@@ -114,25 +114,14 @@ class TestController extends Controller
 
     public function answer(Request $request, Test $test)
     {
-        // TODO verify $request
         // query question
         $question = Question::where('code', '=', $request->question_code)->firstOrFail();
-        if(!$question) {
-            return $this->success('data not exist', 404);
-        }
+
         // query test session.
-        $where = array(
-            'code' => $request->session,
-            'user_id' => auth()->user()->id
-        );
+        $session = TestSession::where('code', '=', $request->session_code)->firstOrFail();
 
-        $session = TestSession::where($where)->firstOrFail();
-
-        if(!$session) {
-            return $this->success('data not exist', 404);
-        }
         // create new question session.
-        $question_session = QuestionSession::create([
+       $question_save = QuestionSession::upsert([
             'user_id' => auth()->user()->id,
             'test_id' => $test->id,
             'test_session_id' => $session->id,
@@ -141,17 +130,33 @@ class TestController extends Controller
             'option' => json_encode($request->option),
             'duration' => $request->duration,
             'status' => 'answered',
-        ]);
+            ], 
+            ['user_id', 'test_id', 'test_session_id', 'question_id'],
+            ['option', 'duration']);
 
-        if(!$question_session) {
-            return $this->success('Not allowed', 403);
+        // if new question session
+        if($question_save == 1) {
+            $session->update([
+                'current_question_id' => $question->id,
+                'duration' => $session->duration + $request->duration
+            ]);
         }
 
-        $session->update([
-            'current_question_id' => $question->id,
-            'duration' => $session->duration + $question_session->duration
-        ]);
-        return $session;
+        // if test completed, when the last one of questions group submit.
+        if ($request->question_position == $test->total) {
+            $session->update([
+                'status' => 'completed',
+                'completed_at' => $now->toDateTimeString()
+            ]);
+            // TODO finsh and computed result. from api or template.
+        }
+
+        $data = [
+            'test' => $test->only('code', 'slug', 'name', 'total', 'duration'),
+            'session' => $session,
+            'question_sessions_count' => $question_sessions_count
+        ];
+        return $data;
     }
     // TODO: goto(), start(), answer(), finish(), result(), thanks().
    

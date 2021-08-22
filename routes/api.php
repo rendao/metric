@@ -46,3 +46,7 @@ Route::group([], function(){
     Route::any('tests', [TestController::class, 'index']);
     Route::any('test/{test:code}', [TestController::class, 'show'])->name('test_show');
 });
+
+Route::fallback(function(){
+    return response()->json(['message' => 'Resource Not Found.'], 404);
+})->name('api.fallback.404');
