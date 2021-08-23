@@ -138,15 +138,18 @@ class TestController extends Controller
         if($question_save == 1) {
             $session->update([
                 'current_question_id' => $question->id,
-                'duration' => $session->duration + $request->duration
+                'count' => $session->count + 1,
             ]);
         }
+
+        $question_session = QuestionSession::where('test_session_id', '=', $session->id)->get();
 
         // if test completed, when the last one of questions group submit.
         if ($request->question_position == $test->total) {
             $session->update([
                 'status' => 'completed',
-                'completed_at' => $now->toDateTimeString()
+                'completed_at' => $now->toDateTimeString(),
+                'duration' => $question_session->sum('duration')
             ]);
             // TODO finsh and computed result. from api or template.
         }
@@ -154,7 +157,7 @@ class TestController extends Controller
         $data = [
             'test' => $test->only('code', 'slug', 'name', 'total', 'duration'),
             'session' => $session,
-            'question_sessions_count' => $question_sessions_count
+            'question_sessions' => $question_session
         ];
         return $data;
     }
