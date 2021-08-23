@@ -35,9 +35,12 @@ php artisan serve
 
 ### Contributors
 
-* Laravel - https://www.laravel.com
-* Laravel-admin - https://github.com/z-song/laravel-admin
-* Vue.js - https://www.vuejs.org
+### Thanks
+
+* Laravel: https://www.laravel.com
+* Laravel-admin : https://github.com/z-song/laravel-admin
+* Vue.js: https://www.vuejs.org
+* AdminLTE: https://github.com/ColorlibHQ/AdminLTE
 
 ## License
 
