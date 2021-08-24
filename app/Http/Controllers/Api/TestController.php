@@ -146,9 +146,11 @@ class TestController extends Controller
         if($question_save == 1) {
             $session->update([
                 'current_question_id' => $question->id,
-                'duration' => $session->duration + $request->duration
+                'count' => $session->count + 1,
             ]);
         }
+
+        $question_session = QuestionSession::where('test_session_id', '=', $session->id)->get();
 
         // if test completed, when the last one of questions group submit.
         $is_finished = false;
@@ -158,7 +160,8 @@ class TestController extends Controller
         if ($question->finish == true || $request->finish == true) {
             $session->update([
                 'status' => 'completed',
-                'completed_at' => $now->toDateTimeString()
+                'completed_at' => $now->toDateTimeString(),
+                'duration' => $question_session->sum('duration')
             ]);
             $is_finished = true;
         }
