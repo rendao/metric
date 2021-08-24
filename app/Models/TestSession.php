@@ -17,7 +17,7 @@ class TestSession extends Model
 
     protected $table = 'test_sessions';
     protected $fillable = ['test_id', 'user_id', 'duration', 'current_question_id', 'start_at', 'end_at', 'status'];
-    protected $hidden = ['id', 'test_id', 'user_id', '', 'created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['id', 'test_id', 'user_id', 'created_at', 'updated_at', 'deleted_at'];
 
     // protected $appends = ['total_time_taken'];
     // Computed

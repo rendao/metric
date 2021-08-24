@@ -22,7 +22,7 @@ class CreateTestScoresTable extends Migration
             $table->integer('end')->nullable();
             $table->string('name')->nullable();
             $table->text('image')->nullable();
-            $table->json('response')->nullable();
+            $table->text('response')->nullable();
             $table->timestamps();
         });
     }

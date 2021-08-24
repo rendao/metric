@@ -6,14 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 
-use App\Models\Test;
 use App\Models\Category;
-use App\Models\Question;
+
+use App\Models\Test;
+use App\Models\TestScore;
 use App\Models\TestSession;
+use App\Models\TestTemplate;
+
+use App\Models\Question;
 use App\Models\QuestionSession;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
@@ -96,7 +101,7 @@ class TestController extends Controller
      */
     public function goto(Test $test, $session_code)
     {
-        $session = TestSession::where('code', $session_code)->firstOrFail();
+        $session = TestSession::where(['code' => $session_code, 'user_id' => auth()->user()->id])->firstOrFail();
 
         // TODO: if completed, update and redirect to finish.
         $questions = $test->questions()->with(['question_type:id,name,code', 'question_session' => function($query) {
@@ -121,18 +126,21 @@ class TestController extends Controller
         $session = TestSession::where('code', '=', $request->session_code)->firstOrFail();
 
         // create new question session.
-       $question_save = QuestionSession::upsert([
-            'user_id' => auth()->user()->id,
-            'test_id' => $test->id,
-            'test_session_id' => $session->id,
-            'question_id' => $question->id,
-            'trait' => $request->trait,
-            'option' => json_encode($request->option),
-            'duration' => $request->duration,
-            'status' => 'answered',
+        $option = $request->option;
+        $question_save = QuestionSession::upsert(
+           [
+                'user_id' => auth()->user()->id,
+                'test_id' => $test->id,
+                'test_session_id' => $session->id,
+                'question_id' => $question->id,
+                'trait' => $request->trait,
+                'option' => json_encode($option),
+                'score' => $option['score'],
+                'duration' => $request->duration,
+                'status' => 'answered',
             ], 
             ['user_id', 'test_id', 'test_session_id', 'question_id'],
-            ['option', 'duration']);
+            ['option', 'score', 'duration']);
 
         // if new question session
         if($question_save == 1) {
@@ -143,21 +151,84 @@ class TestController extends Controller
         }
 
         // if test completed, when the last one of questions group submit.
-        if ($request->question_position == $test->total) {
+        $is_finished = false;
+
+        return $this->compute($session);
+
+        if ($question->finish == true || $request->finish == true) {
             $session->update([
                 'status' => 'completed',
                 'completed_at' => $now->toDateTimeString()
             ]);
-            // TODO finsh and computed result. from api or template.
+            $is_finished = true;
         }
 
         $data = [
             'test' => $test->only('code', 'slug', 'name', 'total', 'duration'),
             'session' => $session,
-            'question_sessions_count' => $question_sessions_count
+            'answered_count' => $question_sessions_count,
+            'is_finished' => $is_finished
         ];
         return $data;
     }
-    // TODO: goto(), start(), answer(), finish(), result(), thanks().
-   
+    
+    // TODO finsh and computed result. from api or template.
+
+    public function compute($test_session)
+    {
+        
+        // get test:
+        $test = Test::findOrFail($test_session->test_id);
+
+        $compute_api_enabled = $test->compute_api_enabled;
+        $template_enabled = $test->template_enabled;
+
+        // TODO: remote api
+        if($compute_api_enabled) {
+
+        }
+        // template
+        if ($template_enabled) {
+            $test_template = TestTemplate::findOrFail($test->template_id);
+        }
+
+        // question sesssions stats
+        $question_sessions = QuestionSession::where('test_session_id', $test_session->id);
+        $duration = $question_sessions->sum('duration');
+        $scores = $question_sessions->groupBy('trait')->selectRaw('sum(score) as score, trait')->pluck('score', 'trait');
+
+        // match test scores
+        $test_scores = TestScore::where('test_id', $test->id);
+
+        // loop
+        $matchs = [];
+        foreach ($scores as $trait => $score) {
+            // TODO: trait or start-end or trait+start-end
+            $test_score = $test_scores->whereRaw('? between start and end',  $score)->get();
+            $match = [
+                'trait' => $trait,
+                'score' => $score,
+                'match' => $test_score
+            ];
+            array_push($matchs, $match);
+        }
+
+        $result = [
+            'duration' => $duration,
+            'scores' => $scores,
+            'matchs' => $matchs,
+        ];
+
+        // $session->update([
+        //     'duration' => $duration,
+        //     'result' => $result
+        // ]);
+
+        $data = [
+            'test' => $test->only('name', 'code', 'short_description'),
+            'result' => $result
+        ];
+        return response()->json($data, 200);
+    }
+
 }

@@ -21,6 +21,7 @@ class CreateQuestionSessionsTable extends Migration
             $table->unsignedBigInteger('question_id')->index();
             $table->string('trait')->nullable();
             $table->json('option')->nullable();
+            $table->integer('score')->default(0);
             $table->integer('duration')->default(0);
             $table->string('status')->default('unanswered');
             $table->boolean('skipped')->default(0);

@@ -138,6 +138,7 @@ class QuestionCrudController extends Controller
             $form->select('question_type_id', __('admin.type'))->options('/admin/question_type/api')->required();
             $form->switch('skippable', __('skippable'));
             $form->number('position', __('position'));
+            $form->switch('finish', __('finish'));
             $form->text('trait');
             $form->image('image', __('Image'));
         });
@@ -153,7 +154,6 @@ class QuestionCrudController extends Controller
             });
 
         });
-
 
         return $form;
     }

@@ -19,6 +19,7 @@ class CreateTestSessionsTable extends Migration
             $table->unsignedBigInteger('test_id');
             $table->unsignedBigInteger('user_id')->default(0);
             $table->integer('current_question_id')->default(0);
+            $table->integer('count')->default(0);
             $table->dateTime('start_at')->nullable();
             $table->dateTime('end_at')->nullable();
             $table->dateTime('completed_at')->nullable();

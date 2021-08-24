@@ -11,6 +11,8 @@ class TestScore extends Model
 {
     protected $table = 'test_scores';
 
+    protected $hidden = ['id', 'test_id', 'created_at', 'updated_at', 'deleted_at'];
+
     public function test()
     {
       return $this->belongsTo(Test::class, 'test_id', 'id');
