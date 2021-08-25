@@ -20,6 +20,9 @@
 
 Encore\Admin\Form::forget(['map', 'editor']);
 
+// `admin custom views`
+app('view')->prependNamespace('admin', resource_path('views/admin'));
+
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid\Column;
 
