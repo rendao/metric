@@ -25,6 +25,7 @@ class CreateQuestionsTable extends Migration
             $table->text('image')->nullable();
             $table->text('hint')->nullable();
             $table->boolean('skippable')->default(1);
+            $table->boolean('finish')->default(0);
             $table->timestamps();
 
             // $table->foreign('test_id')
