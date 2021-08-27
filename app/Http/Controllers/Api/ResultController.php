@@ -15,7 +15,7 @@ class ResultController extends Controller
     // get test result
     public function result(Request $request, TestSession $test_session)
     {
-        $result = $test_session->result;
+        $result = $test_session->where('user_id', auth()->user()->id)->result;
         return response()->json($result, 200);
     }
        

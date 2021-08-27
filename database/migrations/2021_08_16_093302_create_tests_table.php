@@ -25,6 +25,7 @@ class CreateTestsTable extends Migration
             $table->longText('description')->nullable();
             $table->unsignedInteger('total')->default(0);
             $table->unsignedInteger('duration')->nullable();
+            $table->string('compute_type')->nullable();
             $table->text('compute_api')->nullable();
             $table->boolean('compute_api_enabled')->default(0);
             $table->integer('template_id')->nullable();

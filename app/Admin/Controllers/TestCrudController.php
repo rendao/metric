@@ -156,6 +156,8 @@ class TestCrudController extends Controller
         $form->column(1/2, function ($form) {
             $form->image('image', __('Image'));
             $form->fieldset('Addons', function (Form $form) {
+                $compute_type = $id ? Test::where('id', $id)->value('compute_type') : 'default';
+                $form->select('compute_type','Compute Type')->options(['default'=>'Default','trait'=>'Trait Only'])->default($compute_type);
                 $form->url('compute_api', __('API'));
                 $form->switch('compute_api_enabled', __('API Enabled'));
                 $form->select('template_id', __('Template'))->options('/admin/test_template/api');

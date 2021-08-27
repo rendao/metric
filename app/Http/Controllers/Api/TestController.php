@@ -175,7 +175,6 @@ class TestController extends Controller
         return $data;
     }
     
-    // TODO finsh and computed result. from api or template.
 
     public function compute($test_session)
     {
@@ -183,10 +182,14 @@ class TestController extends Controller
         // get test:
         $test = Test::findOrFail($test_session->test_id);
 
+        $compute_type = $test->compute_type;
         $compute_api_enabled = $test->compute_api_enabled;
         $template_enabled = $test->template_enabled;
 
-        // TODO: remote api
+        /**
+         * finsh and computed result. from api or template script.
+         */
+        // API
         if($compute_api_enabled) {
 
         }
@@ -203,11 +206,20 @@ class TestController extends Controller
         // match test scores
         $test_scores = TestScore::where('test_id', $test->id);
 
-        // loop
+        // loop for result
         $matchs = [];
         foreach ($scores as $trait => $score) {
-            // TODO: trait or start-end or trait+start-end
-            $test_score = $test_scores->whereRaw('? between start and end',  $score)->get();
+            /**
+             * trait or start-end or trait+start-end
+             */
+            if ($compute_type == 'trait') {
+                // trait only
+                $test_score = $test_scores->where('code', $trait)->firstOrFail();
+            } else {
+                // trait + start-end
+                $test_score = $test_scores->whereRaw('? between start and end',  $score)->get();
+            }
+        
             $match = [
                 'trait' => $trait,
                 'score' => $score,
@@ -222,15 +234,24 @@ class TestController extends Controller
             'matchs' => $matchs,
         ];
 
-        // $session->update([
-        //     'duration' => $duration,
-        //     'result' => $result
-        // ]);
+        /**
+         * update this test session.
+         */
+        $session->update([
+            'duration' => $duration,
+            'result' => $result,
+            'status' => 'completed',
+            'completed_at' => Carbon::now()->toDateTimeString()
+        ]);
 
+        /**
+         * response
+         */
         $data = [
             'test' => $test->only('name', 'code', 'short_description'),
             'result' => $result
         ];
+
         return response()->json($data, 200);
     }
 
