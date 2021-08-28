@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TestController;
+use App\Http\Controllers\Api\HistoryController;
 
 use App\Models\User;
 
@@ -37,6 +38,7 @@ Route::middleware(['auth:sanctum'])->prefix('user')->group(function () {
     Route::get('/profile', function(Request $request) {
         return auth()->user();
     });
+    Route::get('/histories', [HistoryController::class, 'index']);
 });
 
 Route::group([], function(){

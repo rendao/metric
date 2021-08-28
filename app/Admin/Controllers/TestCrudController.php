@@ -147,15 +147,17 @@ class TestCrudController extends Controller
             $form->select('category_id', __('Category'))->options('/admin/category/api')->required();
             $form->select('test_type_id', __('Type'))->options('/admin/test_type/api')->required();
             $form->text('name', __('Name'))->required();
-            $form->number('total', 'Total Questions');
-            $form->number('duration', 'Duration');
             $form->text('slug', __('Slug'));
             $form->textarea('short_description', __('Short Description'));  
             $form->summernote('description', __('Description'));
         });
+
         $form->column(1/2, function ($form) {
+            $form->number('total', 'Total Questions');
+            $form->number('duration', 'Duration');
             $form->image('image', __('Image'));
             $form->fieldset('Addons', function (Form $form) {
+                $id = request()->route()->parameter('id');
                 $compute_type = $id ? Test::where('id', $id)->value('compute_type') : 'default';
                 $form->select('compute_type','Compute Type')->options(['default'=>'Default','trait'=>'Trait Only'])->default($compute_type);
                 $form->url('compute_api', __('API'));

@@ -62,7 +62,7 @@ class TestController extends Controller
         if ($sessions->count() > 0) {
             $session = $test->sessions()->where('user_id', auth()->user()->id)->latest()->first();
             return $this->goto($test, $session->code);
-        } else {
+        }  else {
             return $this->create($test);
         }
 
@@ -219,7 +219,6 @@ class TestController extends Controller
                 // trait + start-end
                 $test_score = $test_scores->whereRaw('? between start and end',  $score)->get();
             }
-        
             $match = [
                 'trait' => $trait,
                 'score' => $score,
