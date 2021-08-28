@@ -14,7 +14,7 @@ git clone https://github.com/rendao/metric.git
 cd metric
 ```
 ```
-composer update
+composer install
 ```
 
 config mysql information in `.env`
@@ -32,6 +32,8 @@ php artisan serve
 
 ``` /documents/Zung_Scale.pdf```
 
+### Screeshot
+<img src="./documents/images/admin-tests.png" width="33%" /> <img src="./documents/images/admin-test-scores.png" width="33%" /><img src="./documents/images/admin-test.png" width="33%" />
 
 ### Contributors
 
