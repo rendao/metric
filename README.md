@@ -1,10 +1,7 @@
 
-## About Metric
+## About Metric (Psychometric test) 
 
-> One open source psychological testing and assessment (Psychometrics) system.
-
-### In development...
-
+> One open source psychological testing and assessment system.
 
 ### Install
 ```
@@ -46,4 +43,4 @@ php artisan serve
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Metric is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
