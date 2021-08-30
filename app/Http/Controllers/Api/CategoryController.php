@@ -29,13 +29,12 @@ class CategoryController extends Controller
         if ($id) {
             $where['category_id'] = $id;
         }
-
+        $category = Category::findOrFail($id);
         $tests = Test::where($where)->orderBy('id', 'desc')->paginate(10);
 
         $data = [
-            'where' => $where,
-            'code' => $id,
-            'data' => $tests
+            'category' => $category,
+            'tests' => $tests
         ];
         return response()->json($data, 200);
     }
