@@ -29,8 +29,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
     Route::get('/test/{test:code}/start', [TestController::class, 'start'])->name('test_start');
-    Route::get('/test/{test:code}/answer', [TestController::class, 'answer'])->name('test_answer');
-    Route::get('/test/{test:code}/finish', [TestController::class, 'finish'])->name('test_finish');
+    Route::any('/test/{test:code}/answer', [TestController::class, 'answer'])->name('test_answer');
+    Route::any('/test/{test:code}/finish', [TestController::class, 'finish'])->name('test_finish');
 
 });
 

@@ -234,7 +234,7 @@ class TestController extends Controller
         /**
          * update this test session.
          */
-        $session->update([
+        $test_session->update([
             'duration' => $duration,
             'result' => $result,
             'status' => 'completed',
