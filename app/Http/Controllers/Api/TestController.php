@@ -57,20 +57,18 @@ class TestController extends Controller
      */
     public function start(Test $test)
     {
-        $sessions = $test->sessions()->where('status', '=', 'started');
+        $where = array(
+            'test_id' => $test->id,
+            'user_id' => auth()->user()->id,
+            'status' => 'started'
+        );
+        $session = TestSession::where($where)->latest()->first();
 
-        if ($sessions->count() > 0) {
-            $session = $test->sessions()->where('user_id', auth()->user()->id)->latest()->first();
+        if ($session) {
             return $this->goto($test, $session->code);
         }  else {
             return $this->create($test);
         }
-
-        $data = [
-            'data' => $sessions
-        ];
-        return response()->json($data, 200);
-
     }
 
     /**
@@ -236,7 +234,7 @@ class TestController extends Controller
         /**
          * update this test session.
          */
-        $session->update([
+        $test_session->update([
             'duration' => $duration,
             'result' => $result,
             'status' => 'completed',
