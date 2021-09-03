@@ -19,7 +19,7 @@ class ResultController extends Controller
             'code' => $test_session_code,
             'user_id' => auth()->user()->id
         ];
-        $result = TestSession::where($where)->firstOrFail();
+        $result = TestSession::where($where)->with(['test:id,name,code,short_description'])->firstOrFail();
         return response()->json($result, 200);
     }
        

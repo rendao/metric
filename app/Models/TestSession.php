@@ -15,9 +15,9 @@ class TestSession extends Model
 {
     use SoftDeletes;
 
-    protected $casts = [
-        'result' => 'array',
-    ];
+    // protected $casts = [
+    //     'result' => 'array',
+    // ];
     protected $table = 'test_sessions';
     protected $fillable = ['test_id', 'user_id', 'duration', 'current_question_id', 'start_at', 'end_at', 'status'];
     protected $hidden = ['id', 'test_id', 'user_id', 'created_at', 'updated_at', 'deleted_at'];
@@ -28,10 +28,10 @@ class TestSession extends Model
     //     return ;
     // }
     
-    // public function getResultAttribute()
-    // {
-    //     return json_decode($this->attributes['result']);
-    // }
+    public function getResultAttribute()
+    {
+        return json_decode($this->attributes['result']);
+    }
 
     public function user()
     {
