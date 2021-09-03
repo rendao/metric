@@ -121,7 +121,7 @@ class TestController extends Controller
         $question = Question::where('code', '=', $request->question_code)->firstOrFail();
 
         // query test session.
-        $session = TestSession::where('code', '=', $request->session_code)->firstOrFail();
+        $test_session = TestSession::where('code', '=', $request->session_code)->firstOrFail();
 
         // create new question session.
         $option = $request->option;
@@ -129,7 +129,7 @@ class TestController extends Controller
            [
                 'user_id' => auth()->user()->id,
                 'test_id' => $test->id,
-                'test_session_id' => $session->id,
+                'test_session_id' => $test_session->id,
                 'question_id' => $question->id,
                 'trait' => $request->trait,
                 'option' => json_encode($option),
@@ -142,32 +142,25 @@ class TestController extends Controller
 
         // if new question session
         if($question_save == 1) {
-            $session->update([
+            $test_session->update([
                 'current_question_id' => $question->id,
-                'count' => $session->count + 1,
+                'count' => $test_session->count + 1,
             ]);
         }
 
-        $question_session = QuestionSession::where('test_session_id', '=', $session->id)->get();
+        $question_session = QuestionSession::where('test_session_id', '=', $test_session->id)->get();
 
         // if test completed, when the last one of questions group submit.
         $is_finished = false;
 
-        return $this->compute($session);
-
         if ($question->finish == true || $request->finish == true) {
-            $session->update([
-                'status' => 'completed',
-                'completed_at' => $now->toDateTimeString(),
-                'duration' => $question_session->sum('duration')
-            ]);
             $is_finished = true;
+            return $this->compute($test_session);
         }
 
         $data = [
             'test' => $test->only('code', 'slug', 'name', 'total', 'duration'),
-            'session' => $session,
-            'answered_count' => $question_sessions_count,
+            'test_session' => $test_session,
             'is_finished' => $is_finished
         ];
         return $data;
@@ -234,19 +227,19 @@ class TestController extends Controller
         /**
          * update this test session.
          */
-        $test_session->update([
-            'duration' => $duration,
-            'result' => $result,
-            'status' => 'completed',
-            'completed_at' => Carbon::now()->toDateTimeString()
-        ]);
-
+        $now = Carbon::now();
+        $test_session->status = 'completed';
+        $test_session->completed_at = $now->toDateTimeString();
+        $test_session->duration = $duration;
+        $test_session->result = json_encode($result);
+        $test_session->save();
+      
         /**
          * response
          */
         $data = [
             'test' => $test->only('name', 'code', 'short_description'),
-            'result' => $result
+            'test_session' => $test_session
         ];
 
         return response()->json($data, 200);

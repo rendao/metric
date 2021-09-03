@@ -13,9 +13,13 @@ use App\Models\QuestionSession;
 class ResultController extends Controller
 {
     // get test result
-    public function result(Request $request, TestSession $test_session)
+    public function show($test_session_code)
     {
-        $result = $test_session->where('user_id', auth()->user()->id)->result;
+        $where = [
+            'code' => $test_session_code,
+            'user_id' => auth()->user()->id
+        ];
+        $result = TestSession::where($where)->firstOrFail();
         return response()->json($result, 200);
     }
        
