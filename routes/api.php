@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TestController;
 use App\Http\Controllers\Api\ResultController;
 use App\Http\Controllers\Api\HistoryController;
+use App\Http\Controllers\BotManController;
 
 use App\Models\User;
 
@@ -22,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::any('/botman', [BotManController::class, 'handle']);
 
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
