@@ -99,18 +99,29 @@ class TestController extends Controller
      */
     public function goto(Test $test, $session_code)
     {
-        $session = TestSession::where(['code' => $session_code, 'user_id' => auth()->user()->id])->firstOrFail();
+        $test_session = TestSession::where(['code' => $session_code, 'user_id' => auth()->user()->id])->firstOrFail();
+        $question_sessions = QuestionSession::where('test_session_id', $test_session->id);
 
-        // TODO: if completed, update and redirect to finish.
+        // pre & current question
+        $pre_question_id = $test_session->current_question_id;
+        if($pre_question_id) {
+            $current_question = Question::where(['test_id' => $test->id])->where( 'id', '>', $pre_question_id)->firstOrFail();
+        } else {
+            $current_question = Question::where(['test_id' => $test->id])->firstOrFail();
+        }
+        
+        // if completed, update and redirect to finish.
         $questions = $test->questions()->with(['question_type:id,name,code', 'question_session' => function($query) {
             $query->where('user_id', auth()->user()->id)->select(['question_id', 'status', 'duration'])->latest()->first();
         }])->get()->makeHidden(['id']);
 
         $data = [
             'test' => $test->only('code', 'slug', 'name', 'total', 'duration'),
+            'pre_question_id' => $pre_question_id,
+            'current_question' => $current_question,
             'questions' => $questions,
-            'session_code' => $session->code,
-            'answered_count' => $session->questions()->wherePivot('status', '=', 'answered')->count()
+            'session_code' => $test_session->code,
+            'answered_count' => $question_sessions->where('status', '=', 'answered')->count()
         ];
         return response()->json($data, 200);
     }
@@ -125,7 +136,7 @@ class TestController extends Controller
 
         // create new question session.
         $option = $request->option;
-        $question_save = QuestionSession::upsert(
+        $question_save = QuestionSession::where(['test_session_id' => $test_session->id])->upsert(
            [
                 'user_id' => auth()->user()->id,
                 'test_id' => $test->id,
