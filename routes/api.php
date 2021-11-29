@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::any('/botman', [BotManController::class, 'handle']);
+
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
