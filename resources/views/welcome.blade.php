@@ -26,6 +26,16 @@
                 <div class=" fixed top-0 right-0 px-6 py-4 sm:block">
                
                     <a href="{{ url('/admin') }}" class="text-sm text-gray-700 underline">Admin</a>
+                    
+                <span>
+                    <a class="text-sm text-gray-700 underline" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
+                    <span class="menu-title">User Logout</span>
+                </a>    
+                <form id="frm-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
+                </span> 
+  
          
                 </div>
             
