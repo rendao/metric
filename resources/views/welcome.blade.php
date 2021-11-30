@@ -26,20 +26,25 @@
                 <div class=" fixed top-0 right-0 px-6 py-4 sm:block">
                
                     <a href="{{ url('/admin') }}" class="text-sm text-gray-700 underline">Admin</a>
-                    
+                
+                
                 <span>
+                    @if(auth()->user())
+                    Welcome, {{auth()->user()->name}}. 
                     <a class="text-sm text-gray-700 underline" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
-                    <span class="menu-title">User Logout</span>
+                    <span class="menu-title">Logout</span>
                 </a>    
                 <form id="frm-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
                 </form>
+                @else 
+                <a href="{{ url('/login') }}" class="text-sm text-gray-700 underline">Login</a>
+                @endif
                 </span> 
-  
+                
          
                 </div>
-            
-
+    
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 <div class="pt-4 sm:justify-start sm:pt-0">
                     <h1>Metric: </h1>
@@ -99,5 +104,14 @@
                 </div>
             </div>
         </div>
+        <link rel="stylesheet" type="text/css" href="http://localhost:8080/assets/css/chat.css">
+        <script>
+            var botmanWidget = {
+                aboutText: 'Chat bot',
+                introMessage: "✋ Hi! I'm form Metric."
+            };
+        </script>
+    
+        <script src='http://localhost:8080/js/widget.js'></script>
     </body>
 </html>

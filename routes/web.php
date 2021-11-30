@@ -14,6 +14,9 @@ use App\Http\Controllers\BotManController;
 |
 */
 
+// Route::post('/botman', [BotManController::class, 'handle']);
+// Route::match(['get', 'post'], '/botman', 'BotManController@handle');
+
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -29,4 +32,4 @@ Route::namespace('Auth')->group(function () {
     Route::get('/register','LoginController@show_signup_form')->name('register');
     Route::post('/register','LoginController@process_signup');
     Route::post('/logout','LoginController@logout')->name('logout');
-  });
+});

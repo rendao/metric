@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use BotMan\BotMan\Messages\Incoming\Answer;
+use App\Http\Conversations\MenuConversation;
    
 class BotManController extends Controller
 {
@@ -17,12 +18,25 @@ class BotManController extends Controller
         $botman->hears('{message}', function($botman, $message) {
    
             if ($message == 'hi') {
-                $this->askName($botman);
-            }else{
-                $botman->reply("write 'hi' for testing...");
+                if (auth()->user()) {
+                    $name = auth()->user()->name;
+                    $botman->reply('Hello there, '.$name);
+                } else {
+                    $botman->reply('Please Login.');
+                }
+                $botman->startConversation(new MenuConversation());
+                
+            } elseif ($message == '\/help') {
+                $this->help($botman);
             }
-   
+            else {
+                $botman->reply("/help See this helping message.🙂");
+            }
         });
+
+        // $botman->hears('\/stop', function(BotMan $bot) {
+        //     $bot->reply('stopped');
+        // })->stopsConversation();
    
         $botman->listen();
     }
@@ -30,13 +44,8 @@ class BotManController extends Controller
     /**
      * Place your BotMan logic here.
      */
-    public function askName($botman)
+    public function help($botman)
     {
-        $botman->ask('Hello! What is your Name?', function(Answer $answer) {
-   
-            $name = $answer->getText();
-   
-            $this->say('Nice to meet you '.$name);
-        });
+        $botman->reply("/help See this helping message");
     }
 }

@@ -57,6 +57,7 @@ class TestController extends Controller
      */
     public function start(Test $test)
     {
+        // var_dump($test);
         $where = array(
             'test_id' => $test->id,
             'user_id' => auth()->user()->id,
@@ -105,7 +106,7 @@ class TestController extends Controller
         // pre & current question
         $pre_question_id = $test_session->current_question_id;
         if($pre_question_id) {
-            $current_question = Question::where(['test_id' => $test->id])->where( 'id', '>', $pre_question_id)->firstOrFail();
+            $current_question = Question::where(['test_id' => $test->id])->where( 'id', '>', $pre_question_id)->first();
         } else {
             $current_question = Question::where(['test_id' => $test->id])->firstOrFail();
         }
